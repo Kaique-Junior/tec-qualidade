@@ -33,7 +33,6 @@ export const GoogleButton = ({ className, redirectTo = window.location.origin }:
       }
     } catch (error) {
       toast.error("Erro ao iniciar login com Google. Tente novamente.");
-      console.error("[GoogleButton] Error:", error);
     } finally {
       setIsLoading(false);
     }

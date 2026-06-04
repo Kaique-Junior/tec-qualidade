@@ -32,7 +32,7 @@ export function useAuth() {
 
     initializeAuth();
 
-    // Monitorar mudanças de autenticação
+    // Monitorar mudanças de autenticação usando a API correta
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user ?? null);

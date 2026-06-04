@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,7 +9,7 @@ interface GoogleButtonProps {
 }
 
 /**
- * Componente de botão para login com Google OAuth.
+ * Componente de botão para login com Google OAuth (versão temporária).
  * 
  * @param className - Classes Tailwind adicionais para estilização
  * @param redirectTo - URL de redirecionamento após autenticação (opcional)
@@ -22,19 +21,16 @@ export const GoogleButton = ({ className, redirectTo = window.location.origin }:
     setIsLoading(true);
     
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo,
-        }
-      });
-
-      if (error) {
-        throw error;
-      }
+      // Placeholder - será implementado quando o Supabase estiver disponível
+      toast.info("Função de login temporária. Implementação real em breve.");
+      
+      // Simulação de redirecionamento
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      
     } catch (error) {
       toast.error("Erro ao iniciar login com Google. Tente novamente.");
-    } finally {
       setIsLoading(false);
     }
   };

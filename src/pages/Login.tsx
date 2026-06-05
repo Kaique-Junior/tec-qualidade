@@ -30,8 +30,7 @@ export default function LoginPage() {
             {/* Nome da plataforma com gradiente */}
             <h1 className="text-3xl font-black bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent mb-2">
               KQUIZZ
-            </h1>
-            
+            </h1>            
           </div>
           
           {/* Botões de autenticação */}

@@ -70,7 +70,7 @@ export default function DisciplinaPage() {
               className="flex items-center space-x-2 text-slate-400 hover:text-purple-400 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Voltar ao Painel</span>
+              <span>Voltar</span>
             </button>
             <div className="flex items-center space-x-2">
               <Zap className="w-6 h-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />

@@ -32,7 +32,6 @@ export default function LoginPage() {
               KQUIZZ
             </h1>
             
-            {/* Subtítulo */}
           </div>
           
           {/* Botões de autenticação */}

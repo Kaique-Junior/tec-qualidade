@@ -11,7 +11,7 @@ interface DisciplinaCardProps {
 /**
  * Componente de card para exibição de uma disciplina.
  * 
- * Exibe nome da disciplina e ícone com botão para acessar quizzes.
+ * Exibe nome da disciplina e imagem com botão para acessar quizzes.
  * Redireciona para a rota /disciplina/[slug] quando o botão é clicado.
  */
 export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) => {
@@ -23,8 +23,16 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
     <Card className={cn("h-full flex flex-col hover:shadow-lg transition-shadow", className)}>
       <CardHeader className="pb-4">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-            <span className="text-xl">{disciplina.icone}</span>
+          <div className="w-12 h-12">
+            <img
+              src={disciplina.icone}
+              alt={`Ícone da disciplina ${disciplina.nome}`}
+              className="w-12 h-12 object-cover rounded-md"
+              onError={(e) => {
+                // Fallback caso o link da imagem quebre
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
           </div>
           <CardTitle className="text-lg font-semibold text-gray-900">
             {disciplina.nome}

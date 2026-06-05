@@ -26,6 +26,10 @@ export const GoogleButton = ({ className, redirectTo = window.location.origin }:
         provider: 'google',
         options: {
           redirectTo,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         }
       });
 

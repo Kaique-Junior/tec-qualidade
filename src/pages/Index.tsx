@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/auth/hooks/useAuth";
  * Quando o usuário não está autenticado, redireciona para o login.
  */
 const Index = () => {
-  const { user, loading } = useAuth();
+  const { user, userProfile, loading, signOut } = useAuth();
 
   // Se o usuário não estiver autenticado, redireciona para o login
   if (!user && !loading) {
@@ -37,13 +37,10 @@ const Index = () => {
             <h1 className="text-xl font-semibold text-gray-900">Técnico em Qualidade</h1>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">
-                Bem-vindo, {user?.email || "Usuário"}!
+                Bem-vindo, {userProfile?.full_name || user?.email || "Usuário"}!
               </span>
               <button
-                onClick={() => {
-                  // Deslogar e redirecionar para o login
-                  window.location.href = '/login';
-                }}
+                onClick={signOut}
                 className="text-sm text-red-600 hover:text-red-800 transition-colors"
               >
                 Logout
@@ -91,6 +88,31 @@ const Index = () => {
                     <span className="text-gray-700">Agendar auditoria interna</span>
                   </li>
                 </ul>
+              </div>
+
+              {/* Seção de informações do usuário */}
+              <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Informações do Usuário</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="text-sm font-medium text-gray-900">{user?.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Nome</p>
+                    <p className="text-sm font-medium text-gray-900">{userProfile?.full_name || 'Não informado'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Função</p>
+                    <p className="text-sm font-medium text-gray-900">{userProfile?.role || 'student'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Membro desde</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString() : 'Não informado'}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

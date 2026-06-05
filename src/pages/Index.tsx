@@ -1,6 +1,4 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { useAuth } from "@/contexts/auth/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Página principal da plataforma Técnico em Qualidade.
@@ -9,27 +7,6 @@ import { useNavigate } from "react-router-dom";
  * Quando não está autenticado, redireciona para o login.
  */
 const Index = () => {
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  // Se o usuário não estiver autenticado, redireciona para o login
-  if (!user && !loading) {
-    navigate('/login');
-    return null;
-  }
-
-  // Se estiver carregando, mostra tela de loading
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -38,13 +15,8 @@ const Index = () => {
           <div className="flex justify-between items-center h-16">
             <h1 className="text-xl font-semibold text-gray-900">Técnico em Qualidade</h1>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                Bem-vindo, {user?.email || "Usuário"}!
-              </span>
-              <button
-                onClick={() => navigate('/login')}
-                className="text-sm text-red-600 hover:text-red-800 transition-colors"
-              >
+              <span className="text-sm text-gray-600">Bem-vindo!</span>
+              <button className="text-sm text-blue-600 hover:text-blue-800">
                 Logout
               </button>
             </div>

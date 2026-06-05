@@ -16,11 +16,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Rota principal - redireciona para login se não autenticado */}
           <Route path="/" element={<Index />} />
-          {/* Rota de login */}
           <Route path="/login" element={<Login />} />
-          {/* Rota 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -4,6 +4,7 @@ import { useQuizzesByDisciplina } from "@/contexts/quizzes/hooks/useQuizzesByDis
 import { QuizCard } from "@/contexts/quizzes/components/QuizCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft } from "lucide-react";
+import type { Quiz } from "@/contexts/quizzes/types";
 
 /**
  * Página dinâmica para exibir quizzes de uma disciplina específica.
@@ -87,21 +88,27 @@ export default function DisciplinaPage() {
               {quizzes && quizzes.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {quizzes.map((quiz) => (
-                    <div key={quiz.id} className="bg-[#111827] border border-slate-800 rounded-lg p-6">
-                      <div className="mb-4">
-                        <h3 className="text-slate-100 font-bold text-lg mb-2">{quiz.titulo}</h3>
-                        <p className="text-slate-400 text-sm mb-4">Quiz de Avaliação</p>
-                        {quiz.descricao ? (
-                          <p className="text-slate-400 text-sm">
-                            {quiz.descricao}
-                          </p>
-                        ) : (
-                          <p className="text-slate-500 italic text-sm">
-                            Nenhuma descrição disponível
-                          </p>
-                        )}
-                      </div>
+                    <div key={quiz.id} className="bg-[#111827] border border-slate-800 rounded-lg p-6 flex flex-col items-center text-center">
+                      {/* Badge da etapa */}
+                      {quiz.etapa && (
+                        <span className="bg-purple-950/60 text-purple-300 border border-purple-800/40 px-2.5 py-0.5 rounded-full text-xs font-semibold mb-2 inline-block">
+                          Etapa {quiz.etapa}
+                        </span>
+                      )}
                       
+                      {/* Título do quiz */}
+                      <h3 className="text-xl font-extrabold text-white mb-2">
+                        {quiz.titulo}
+                      </h3>
+                      
+                      {/* Descrição do quiz */}
+                      {quiz.descricao && (
+                        <p className="text-slate-400 text-sm mb-5 max-w-[250px]">
+                          {quiz.descricao}
+                        </p>
+                      )}
+                      
+                      {/* Botão iniciar quiz */}
                       <button 
                         onClick={() => window.open(quiz.url_link, "_blank")}
                         className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white font-medium rounded-lg py-2 px-4 w-full transition-all duration-200 shadow-[0_0_10px_rgba(168,85,247,0.1)]"

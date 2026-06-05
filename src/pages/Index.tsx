@@ -119,7 +119,7 @@ export default function Index() {
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-slate-50 mb-2">Disciplinas</h2>
             <p className="text-slate-400 text-lg">
-              Acesse os quizzes e materiais de estudo para cada disciplina
+              ACESSE AGORA TODOS OS QUIZZES FEITOS!
             </p>
           </div>
 

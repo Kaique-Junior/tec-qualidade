@@ -3,7 +3,7 @@ import { useDisciplinaBySlug } from "@/contexts/disciplinas/hooks/useDisciplinaB
 import { useQuizzesByDisciplina } from "@/contexts/quizzes/hooks/useQuizzesByDisciplina";
 import { QuizCard } from "@/contexts/quizzes/components/QuizCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Zap } from "lucide-react";
 import type { Quiz } from "@/contexts/quizzes/types";
 
 /**
@@ -72,7 +72,10 @@ export default function DisciplinaPage() {
               <ArrowLeft className="w-5 h-5" />
               <span>Voltar ao Painel</span>
             </button>
-            <h1 className="text-slate-50 font-black text-2xl">{disciplina.nome}</h1>
+            <div className="flex items-center space-x-2">
+              <Zap className="w-6 h-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
+              <h1 className="text-slate-50 font-black text-2xl">{disciplina.nome}</h1>
+            </div>
             <div></div> {/* Espaço vazio para alinhar */}
           </div>
         </div>

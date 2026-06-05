@@ -1,12 +1,32 @@
+import { useAuth } from "../hooks/useAuth";
 import { GoogleButton } from "./GoogleButton";
 
 /**
  * Página de login da plataforma Técnico em Qualidade.
  * 
- * Utiliza o componente GoogleButton para autenticação via OAuth do Google.
- * O redirecionamento após login é configurado para a origem atual da aplicação.
+ * Utiliza o hook useAuth para verificar estado de autenticação.
+ * Se o usuário já estiver autenticado, redireciona para a página principal.
  */
 export const Login = () => {
+  const { user, loading } = useAuth();
+
+  // Se o usuário já estiver autenticado, redireciona
+  if (user) {
+    window.location.href = "/";
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Verificando autenticação...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">

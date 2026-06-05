@@ -1,13 +1,13 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
-import { useDisciplinas, getDisciplinasModulo1 } from "@/contexts/disciplinas/hooks/useDisciplinas";
+import { useDisciplinas } from "@/contexts/disciplinas/hooks/useDisciplinas";
 import { DisciplinaCard } from "@/contexts/disciplinas/components/DisciplinaCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
 /**
  * Página principal da plataforma Técnico em Qualidade.
  * 
- * Quando o usuário está autenticado, mostra o dashboard com cards das disciplinas do Módulo 1.
+ * Quando o usuário está autenticado, mostra o dashboard com todas as disciplinas.
  * Quando não está autenticado, redireciona para o login.
  */
 export default function Index() {
@@ -31,9 +31,6 @@ export default function Index() {
       </div>
     );
   }
-
-  // Filtra disciplinas do Módulo 1
-  const disciplinasModulo1 = disciplinas ? getDisciplinasModulo1(disciplinas) : [];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -64,20 +61,20 @@ export default function Index() {
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Disciplinas do Módulo 1</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Disciplinas</h2>
                   <p className="text-gray-600">
                     Acesse os quizzes e materiais de estudo para cada disciplina
                   </p>
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-gray-500">
                   <span>📚</span>
-                  <span>{disciplinasModulo1.length} disciplinas</span>
+                  <span>{disciplinas?.length || 0} disciplinas</span>
                 </div>
               </div>
 
-              {disciplinasModulo1.length > 0 ? (
+              {disciplinas && disciplinas.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {disciplinasModulo1.map((disciplina) => (
+                  {disciplinas.map((disciplina) => (
                     <DisciplinaCard 
                       key={disciplina.id} 
                       disciplina={disciplina} 
@@ -93,7 +90,7 @@ export default function Index() {
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma disciplina encontrada</h3>
                   <p className="text-gray-600">
-                    Não foram encontradas disciplinas do Módulo 1 no sistema.
+                    Não foram encontradas disciplinas no sistema.
                   </p>
                 </div>
               )}

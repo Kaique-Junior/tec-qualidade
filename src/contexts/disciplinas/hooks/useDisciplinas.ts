@@ -4,9 +4,9 @@ import { toast } from "sonner";
 import type { Disciplina } from "../types";
 
 /**
- * Hook para buscar disciplinas do Supabase.
+ * Hook para buscar todas as disciplinas do Supabase.
  * 
- * Busca todas as disciplinas e filtra as do Módulo 1 para exibição.
+ * Busca todas as disciplinas da tabela sem filtros de módulo.
  * Utilizado pelo componente principal da página.
  */
 export function useDisciplinas() {
@@ -30,17 +30,4 @@ export function useDisciplinas() {
       }
     },
   });
-}
-
-/**
- * Filtra disciplinas do Módulo 1 para exibição no dashboard.
- * 
- * @param disciplinas - Lista completa de disciplinas
- * @returns Disciplinas filtradas do Módulo 1
- */
-export function getDisciplinasModulo1(disciplinas: Disciplina[]) {
-  return disciplinas.filter(disciplina => 
-    disciplina.nome.toLowerCase().includes("módulo 1") ||
-    disciplina.nome.toLowerCase().includes("modulo 1")
-  );
 }

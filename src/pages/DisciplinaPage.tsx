@@ -52,7 +52,7 @@ export default function DisciplinaPage() {
               onClick={handleBackToDashboard}
               className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white px-6 py-2 rounded-lg transition-all duration-200 shadow-[0_0_10px_rgba(168,85,247,0.1)]"
             >
-              Voltar ao Pain
+              Voltar
             </button>
           </div>
         </div>

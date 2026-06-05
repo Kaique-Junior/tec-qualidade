@@ -52,7 +52,7 @@ export default function DisciplinaPage() {
               onClick={handleBackToDashboard}
               className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white px-6 py-2 rounded-lg transition-all duration-200 shadow-[0_0_10px_rgba(168,85,247,0.1)]"
             >
-              Voltar
+              Voltar ao Painel
             </button>
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function DisciplinaPage() {
               className="flex items-center space-x-2 text-slate-400 hover:text-purple-400 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Voltar ao Painel</span>
+              <span>Voltar</span>
             </button>
             <div className="flex items-center space-x-2">
               <Zap className="w-6 h-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />

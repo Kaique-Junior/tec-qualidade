@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,7 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
 
   return (
     <Card className={cn(
-      "flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden",
+      "flex flex-col bg-[#111827] border border-slate-800 shadow-sm transition-all duration-300 hover:border-purple-500/50 hover:shadow-[0_0_15px_rgba(168,85,247,0.05)] hover:-translate-y-1 overflow-hidden",
       className
     )}>
       {/* Imagem de capa */}
@@ -40,20 +40,20 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
             }
           }}
         />
-        <div className="fallback-image hidden absolute inset-0 bg-gray-100 flex items-center justify-center">
-          <span className="text-4xl text-gray-400">{disciplina.icone}</span>
+        <div className="fallback-image hidden absolute inset-0 bg-[#111827] flex items-center justify-center">
+          <span className="text-4xl text-slate-600">{disciplina.icone}</span>
         </div>
       </div>
       
       {/* Conteúdo */}
       <div className="p-5 flex-1 flex flex-col">
         {/* Badge */}
-        <Badge variant="secondary" className="w-fit mb-3 bg-blue-50 text-blue-700">
+        <Badge variant="secondary" className="w-fit mb-3 bg-purple-950/40 text-purple-300 border border-purple-800/30">
           Módulo 1
         </Badge>
         
         {/* Título */}
-        <CardTitle className="font-bold text-lg text-slate-800 line-clamp-2 min-h-[3.5rem] mb-6">
+        <CardTitle className="font-bold text-lg text-slate-50 line-clamp-2 min-h-[3.5rem] mb-6">
           {disciplina.nome}
         </CardTitle>
         
@@ -61,7 +61,7 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
         <div className="mt-auto">
           <Button 
             onClick={handleAccessQuizzes}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="w-full bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white rounded-lg transition-all duration-300"
           >
             Acessar Quizzes
           </Button>

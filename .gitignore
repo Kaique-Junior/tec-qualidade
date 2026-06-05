@@ -35,7 +35,3 @@ dist-ssr
 # Supabase migrations - never modify existing migrations
 supabase/migrations/*
 !supabase/migrations/README.md
-
-# Protected files per AI_RULES.md
-src/components/ui/*
-src/integrations/supabase/client.ts

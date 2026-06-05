@@ -33,9 +33,6 @@ export default function LoginPage() {
             </h1>
             
             {/* Subtítulo */}
-            <p className="text-slate-400 text-sm">
-              Sua plataforma técnica de testes e qualidade.
-            </p>
           </div>
           
           {/* Botões de autenticação */}

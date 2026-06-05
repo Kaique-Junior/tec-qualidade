@@ -1,14 +1,18 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
+import { useDisciplinas, getDisciplinasModulo1 } from "@/contexts/disciplinas/hooks/useDisciplinas";
+import { DisciplinaCard } from "@/contexts/disciplinas/components/DisciplinaCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /**
  * Página principal da plataforma Técnico em Qualidade.
  * 
- * Quando o usuário está autenticado, mostra o dashboard.
+ * Quando o usuário está autenticado, mostra o dashboard com cards das disciplinas do Módulo 1.
  * Quando não está autenticado, redireciona para o login.
  */
 export default function Index() {
   const { user, loading } = useAuth();
+  const { data: disciplinas, isLoading: isLoadingDisciplinas } = useDisciplinas();
 
   // Se o usuário não estiver autenticado, redireciona para o login
   if (!user && !loading) {
@@ -16,8 +20,8 @@ export default function Index() {
     return null;
   }
 
-  // Se estiver carregando, mostra tela de loading
-  if (loading) {
+  // Se estiver carregando autenticação ou disciplinas, mostra tela de loading
+  if (loading || isLoadingDisciplinas) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
@@ -27,6 +31,9 @@ export default function Index() {
       </div>
     );
   }
+
+  // Filtra disciplinas do Módulo 1
+  const disciplinasModulo1 = disciplinas ? getDisciplinasModulo1(disciplinas) : [];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -55,40 +62,41 @@ export default function Index() {
         <div className="px-4 py-6 sm:px-0">
           <div className="bg-white rounded-lg shadow">
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Dashboard</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-medium text-blue-900">Total de Projetos</h3>
-                  <p className="text-2xl font-bold text-blue-600 mt-2">24</p>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Disciplinas do Módulo 1</h2>
+                  <p className="text-gray-600">
+                    Acesse os quizzes e materiais de estudo para cada disciplina
+                  </p>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-medium text-green-900">Projetos Ativos</h3>
-                  <p className="text-2xl font-bold text-green-600 mt-2">18</p>
-                </div>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-medium text-yellow-900">Tarefas Pendentes</h3>
-                  <p className="text-2xl font-bold text-yellow-600 mt-2">7</p>
+                <div className="flex items-center space-x-2 text-sm text-gray-500">
+                  <span>📚</span>
+                  <span>{disciplinasModulo1.length} disciplinas</span>
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 mb-3">Próximas Ações</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                    <span className="text-gray-700">Revisar relatório de qualidade Q4</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                    <span className="text-gray-700">Atualizar padrões de inspeção</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
-                    <span className="text-gray-700">Agendar auditoria interna</span>
-                  </li>
-                </ul>
-              </div>
+              {disciplinasModulo1.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {disciplinasModulo1.map((disciplina) => (
+                    <DisciplinaCard 
+                      key={disciplina.id} 
+                      disciplina={disciplina} 
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-gray-400 mb-4">
+                    <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma disciplina encontrada</h3>
+                  <p className="text-gray-600">
+                    Não foram encontradas disciplinas do Módulo 1 no sistema.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

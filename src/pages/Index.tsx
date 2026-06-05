@@ -1,4 +1,3 @@
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { useDisciplinas } from "@/contexts/disciplinas/hooks/useDisciplinas";
 import { DisciplinaCard } from "@/contexts/disciplinas/components/DisciplinaCard";
@@ -8,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Footer } from "@/components/Footer";
 import { useState } from "react";
 
 /**
@@ -49,7 +49,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19]">
+    <div className="min-h-screen bg-[#0b0f19] flex flex-col">
       {/* Header */}
       <header className="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-3">
@@ -102,7 +102,7 @@ export default function Index() {
                   </Button>
                   <Button
                     onClick={handleLogout}
-                    className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600"
+                    className="bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600"
                   >
                     Sair
                   </Button>
@@ -114,7 +114,7 @@ export default function Index() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+      <main className="flex-1 max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-slate-50 mb-2">Disciplinas</h2>
@@ -154,7 +154,7 @@ export default function Index() {
         </div>
       </main>
 
-      <MadeWithDyad />
+      <Footer />
     </div>
   );
 }

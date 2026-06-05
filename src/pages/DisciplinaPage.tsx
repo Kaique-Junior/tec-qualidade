@@ -4,6 +4,7 @@ import { useQuizzesByDisciplina } from "@/contexts/quizzes/hooks/useQuizzesByDis
 import { QuizCard } from "@/contexts/quizzes/components/QuizCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Zap } from "lucide-react";
+import { Footer } from "@/components/Footer";
 import type { Quiz } from "@/contexts/quizzes/types";
 
 /**
@@ -60,7 +61,7 @@ export default function DisciplinaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0f19]">
+    <div className="min-h-screen bg-[#0b0f19] flex flex-col">
       {/* Header */}
       <header className="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +71,7 @@ export default function DisciplinaPage() {
               className="flex items-center space-x-2 text-slate-400 hover:text-purple-400 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span></span>
+              <span>Voltar ao Painel</span>
             </button>
             <div className="flex items-center space-x-2">
               <Zap className="w-6 h-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
@@ -82,7 +83,7 @@ export default function DisciplinaPage() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="flex-1 max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           <div className="bg-slate-900/60 backdrop-blur-sm rounded-lg border border-slate-800 shadow-xl">
             <div className="p-6">
@@ -144,6 +145,8 @@ export default function DisciplinaPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

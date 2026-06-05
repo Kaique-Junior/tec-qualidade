@@ -1,6 +1,5 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Página principal da plataforma Técnico em Qualidade.
@@ -8,13 +7,12 @@ import { useNavigate } from "react-router-dom";
  * Quando o usuário está autenticado, mostra o dashboard.
  * Quando não está autenticado, redireciona para o login.
  */
-const Index = () => {
+export default function Index() {
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
 
   // Se o usuário não estiver autenticado, redireciona para o login
   if (!user && !loading) {
-    navigate('/login');
+    window.location.href = '/login';
     return null;
   }
 
@@ -42,7 +40,7 @@ const Index = () => {
                 Bem-vindo, {user?.email || "Usuário"}!
               </span>
               <button
-                onClick={() => navigate('/login')}
+                onClick={() => window.location.href = '/login'}
                 className="text-sm text-red-600 hover:text-red-800 transition-colors"
               >
                 Logout
@@ -99,6 +97,4 @@ const Index = () => {
       <MadeWithDyad />
     </div>
   );
-};
-
-export default Index;
+}

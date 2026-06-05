@@ -17,7 +17,7 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar sessão atual usando a API correta
+    // Verificar sessão atual
     const initializeAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();

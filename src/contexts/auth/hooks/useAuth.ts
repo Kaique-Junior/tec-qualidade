@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import type { User } from "@supabase/supabase-js";
 
 /**
@@ -17,21 +18,37 @@ export function useAuth() {
 
   useEffect(() => {
     // Verificar sessão atual
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const initializeAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error("Error getting session:", error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Monitorar mudanças de autenticação
+    initializeAuth();
+
+    // Monitorar mudanças de autenticação usando a API correta
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_, session) => setUser(session?.user ?? null)
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
     );
 
     return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+      toast.success("Logout realizado com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao realizar logout. Tente novamente.");
+    }
   };
 
   return {

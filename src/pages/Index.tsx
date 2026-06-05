@@ -42,7 +42,12 @@ export default function Index() {
               <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">KQ</span>
               </div>
-              <h1 className="text-xl font-semibold text-slate-50">Técnico em Qualidade</h1>
+              <div>
+                <h1 className="font-black text-2xl bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
+                  KQUIZZ
+                </h1>
+                <p className="text-sm text-slate-500">| Técnico em Qualidade</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-slate-400">

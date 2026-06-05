@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { useDisciplinas } from "@/contexts/disciplinas/hooks/useDisciplinas";
 import { DisciplinaCard } from "@/contexts/disciplinas/components/DisciplinaCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LogOut } from "lucide-react";
 
 /**
  * Página principal da plataforma Técnico em Qualidade.
@@ -36,30 +37,29 @@ export default function Index() {
     <div className="min-h-screen bg-[#0b0f19]">
       {/* Header */}
       <header className="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">KQ</span>
-              </div>
-              <div>
-                <h1 className="font-black text-2xl bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
-                  KQUIZZ
-                </h1>
-                <p className="text-sm text-slate-500">| Técnico em Qualidade</p>
-              </div>
+        <div className="max-w-7xl mx-auto flex flex-row justify-between items-center px-4 py-3">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">KQ</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-slate-400">
-                Bem-vindo, {user?.email || "Usuário"}!
-              </span>
-              <button
-                onClick={() => window.location.href = '/login'}
-                className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
-              >
-                Logout
-              </button>
+            <div>
+              <h1 className="font-black text-2xl bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
+                KQUIZZ
+              </h1>
+              <p className="text-sm text-slate-500 hidden sm:inline">| Técnico em Qualidade</p>
             </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-slate-400 hidden md:block">
+              Bem-vindo, {user?.email || "Usuário"}!
+            </span>
+            <button
+              onClick={() => window.location.href = '/login'}
+              className="text-purple-400 hover:text-purple-300 transition-colors p-1"
+            >
+              <LogOut className="w-4 h-4 md:hidden" />
+              <span className="hidden md:inline ml-1">Logout</span>
+            </button>
           </div>
         </div>
       </header>

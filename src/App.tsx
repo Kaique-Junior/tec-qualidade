@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import { Login } from "./contexts/auth/components/Login";
 import NotFound from "./pages/NotFound";
@@ -16,10 +16,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Rota principal - redireciona para login se não autenticado */}
-          <Route path="/" element={<Index />} />
           {/* Rota de login */}
           <Route path="/login" element={<Login />} />
+          {/* Rota principal - protegida, redireciona para login se não autenticado */}
+          <Route path="/" element={<Index />} />
           {/* Rota 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>

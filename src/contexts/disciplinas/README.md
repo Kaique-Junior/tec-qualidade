@@ -1,12 +1,12 @@
 # Contexto de Disciplinas
 
-Este contexto gerencia toda a lógica relacionada a disciplinas e quizzes da plataforma Técnico em Qualidade.
+Este contexto gerencia toda a lógica relacionada a disciplinas da plataforma KQUIZZ.
 
 ## Arquitetura
 
-- **components/DisciplinaCard.tsx**: Componente para exibição de disciplinas
-- **hooks/useDisciplinas.ts**: Hook para buscar disciplinas do Supabase
-- **types.ts**: Tipos para disciplinas e quizzes
+- **DisciplinaCard.tsx**: Componente de card moderno para exibição de disciplinas
+- **useDisciplinas.ts**: Hook para buscar todas as disciplinas do Supabase
+- **useDisciplinaBySlug.ts**: Hook para buscar disciplina específica pelo slug
 
 ## Dependências
 
@@ -16,5 +16,4 @@ Este contexto gerencia toda a lógica relacionada a disciplinas e quizzes da pla
 
 ## Tabelas Utilizadas
 
-- `public.disciplinas`: Armazena dados das disciplinas
-- `public.quizzes`: Armazena quizzes por disciplina
+- `public.disciplinas`: Armazena dados das disciplinas (id, nome, slug, icone, created_at)

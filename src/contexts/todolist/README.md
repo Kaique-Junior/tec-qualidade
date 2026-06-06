@@ -4,10 +4,9 @@ Este contexto gerencia toda a lógica relacionada à lista de tarefas da platafo
 
 ## Arquitetura
 
-- **hooks/useTodoList.ts**: Hook principal para gerenciar operações de tarefas
-- **types.ts**: Tipos para tarefas
-- **components/TodoItem.tsx**: Componente individual de tarefa
-- **components/TodoForm.tsx**: Formulário para adicionar novas tarefas
+- **useTodoList.ts**: Hook principal para gerenciar operações de tarefas (CRUD)
+- **TodoForm.tsx**: Formulário moderno para adicionar novas tarefas
+- **TodoItem.tsx**: Componente individual de tarefa com checkbox e botão de deletar
 
 ## Dependências
 
@@ -18,4 +17,4 @@ Este contexto gerencia toda a lógica relacionada à lista de tarefas da platafo
 
 ## Tabelas Utilizadas
 
-- `public.todolist`: Armazena tarefas dos usuários
+- `public.todolist`: Armazena tarefas dos usuários (id, user_id, title, is_completed, created_at)

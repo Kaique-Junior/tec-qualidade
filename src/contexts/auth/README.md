@@ -1,17 +1,18 @@
 # Contexto de Autenticação
 
-Este contexto gerencia toda a lógica de autenticação da plataforma Técnico em Qualidade.
+Este contexto gerencia toda a lógica de autenticação da plataforma KQUIZZ.
 
 ## Arquitetura
 
-- **GoogleButton.tsx**: Componente isolado para login com Google OAuth
-- **Login.tsx**: Página principal de autenticação
-- **useAuth.ts**: Hook para gerenciar estado de autenticação
+- **Login.tsx**: Página principal de autenticação com login via Google OAuth e login como convidado
+- **GoogleButton.tsx**: Componente isolado com botões de autenticação
+- **useAuth.ts**: Hook para gerenciar estado de autenticação (session, loading, signOut)
 
 ## Dependências
 
 - Supabase client: `src/integrations/supabase/client.ts`
 - Notificações: `sonner` para feedback ao usuário
+- React Router: para navegação
 
 ## Tabelas Utilizadas
 

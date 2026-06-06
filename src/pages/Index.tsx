@@ -125,10 +125,10 @@ export default function Index() {
         {/* Título principal e subtítulo */}
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-50 mb-4 leading-tight">
-            Pronto para os estudos?
+            FUNCIONALIDADES
           </h1>
           <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Sua plataforma de testes e simulados técnicos em Qualidade de Software.
+            Bem-vindo, {user?.email || "Usuário"}!
           </p>
         </div>
 

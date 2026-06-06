@@ -8,7 +8,7 @@ import type { User } from "@supabase/supabase-js";
  * 
  * Fornece:
  * - user: Dados do usuário autenticado ou null
- * - loading: Estado de carregamento inicial (mais robusto)
+ * - loading: Estado de carregamento inicial
  * - isAuthenticated: Se o usuário está autenticado
  * - signOut: Função para deslogar
  */
@@ -17,40 +17,29 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-
     // Verificar sessão atual
     const initializeAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (isMounted) {
-          setUser(session?.user ?? null);
-          setLoading(false);
-        }
+        setUser(session?.user ?? null);
       } catch (error) {
         console.error("Error getting session:", error);
-        if (isMounted) {
-          setUser(null);
-          setLoading(false);
-        }
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     initializeAuth();
 
-    // Monitorar mudanças de autenticação
+    // Monitorar mudanças de autenticação usando a API correta
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        if (isMounted) {
-          setUser(session?.user ?? null);
-        }
+        setUser(session?.user ?? null);
       }
     );
 
-    return () => {
-      isMounted = false;
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {

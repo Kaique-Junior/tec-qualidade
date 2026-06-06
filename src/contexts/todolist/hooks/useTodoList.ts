@@ -8,10 +8,9 @@ import type { Todo } from "../types";
  * 
  * Implementa funções para:
  * - Buscar tarefas do usuário logado
- * - Adicionar nova tarefa com data de prazo
+ * - Adicionar nova tarefa
  * - Alternar status de conclusão
  * - Deletar tarefa
- * - Editar tarefa (título e data)
  */
 export function useTodoList() {
   const queryClient = useQueryClient();
@@ -36,15 +35,14 @@ export function useTodoList() {
     },
   });
 
-  // Adicionar nova tarefa com data de prazo
+  // Adicionar nova tarefa
   const { mutate: addTodo } = useMutation({
-    mutationFn: async ({ title, due_date }: { title: string; due_date?: string }) => {
+    mutationFn: async (title: string) => {
       try {
         const { data, error } = await supabase
           .from("todolist")
           .insert({
             title,
-            due_date,
             user_id: (await supabase.auth.getUser()).data.user?.id,
           })
           .select()
@@ -84,28 +82,6 @@ export function useTodoList() {
     },
   });
 
-  // Editar tarefa (título e data)
-  const { mutate: editTodo } = useMutation({
-    mutationFn: async ({ id, title, due_date }: { id: string; title: string; due_date?: string }) => {
-      try {
-        const { error } = await supabase
-          .from("todolist")
-          .update({ title, due_date })
-          .eq("id", id);
-
-        if (error) throw new Error(error.message);
-        return { id, title, due_date };
-      } catch (error) {
-        toast.error("Erro ao editar tarefa: " + (error as Error).message);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
-      toast.success("Tarefa atualizada com sucesso!");
-    },
-  });
-
   // Deletar tarefa
   const { mutate: deleteTodo } = useMutation({
     mutationFn: async (id: string) => {
@@ -132,32 +108,12 @@ export function useTodoList() {
   const activeTodos = todos?.filter(todo => !todo.is_completed) || [];
   const completedTodos = todos?.filter(todo => todo.is_completed) || [];
 
-  // Função para calcular dias restantes
-  const getDaysRemaining = (due_date?: string | null) => {
-    if (!due_date) return null;
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const due = new Date(due_date);
-    due.setHours(0, 0, 0, 0);
-    
-    const diffTime = due.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays < 0) return { status: 'overdue', days: Math.abs(diffDays) };
-    if (diffDays === 0) return { status: 'today', days: 0 };
-    return { status: 'upcoming', days: diffDays };
-  };
-
   return {
     todos: activeTodos,
     completedTodos,
     isLoading,
     addTodo,
     toggleTodo,
-    editTodo,
     deleteTodo,
-    getDaysRemaining,
   };
 }

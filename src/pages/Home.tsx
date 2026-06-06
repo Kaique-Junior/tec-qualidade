@@ -13,7 +13,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleGoToDisciplinas = () => {
-    navigate("/");
+    navigate("/disciplinas");
   };
 
   const handleGoToTodoList = () => {

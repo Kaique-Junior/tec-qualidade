@@ -34,11 +34,17 @@ const App = () => {
             {/* Rota de Login */}
             <Route path="/login" element={<Login />} />
             
-            {/* Rotas principais com redirecionamento automático */}
-            <Route path="/" element={<Index />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
+            {/* Rotas principais - raiz agora é a tela de introdução */}
+            <Route path="/" element={<Home />} />
+            
+            {/* Rota de disciplinas */}
+            <Route path="/disciplinas" element={<Index />} />
+            
+            {/* Rota de ToDo List */}
             <Route path="/todo" element={<TodoPage />} />
+            
+            {/* Rota dinâmica para quizzes de disciplina */}
+            <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
             
             {/* Rota 404 */}
             <Route path="*" element={<NotFound />} />

@@ -3,9 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import EmptyHome from "./pages/EmptyHome";
-import DisciplinasPage from "./pages/DisciplinasPage";
 import Index from "./pages/Index";
+import DisciplinasPage from "./pages/DisciplinasPage";
 import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
@@ -38,7 +37,7 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={<EmptyHome />} />
+              <Route path="/" element={<Index />} />
               <Route path="/disciplinas" element={<Index />} />
               <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
             </Routes>
@@ -56,10 +55,10 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<EmptyHome />} />
+            <Route path="/" element={<Index />} />
             <Route path="/disciplinas" element={<DisciplinasPage />} />
             <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
-            <Route path="/login" element={<EmptyHome />} />
+            <Route path="/login" element={<Index />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

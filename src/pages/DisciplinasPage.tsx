@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { useDisciplinas } from "@/contexts/disciplinas/hooks/useDisciplinas";
 import { DisciplinaCard } from "@/contexts/disciplinas/components/DisciplinaCard";
 import { Skeleton } from "@/components/ui/skeleton";

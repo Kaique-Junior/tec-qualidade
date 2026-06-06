@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTodoList } from "../hooks/useTodoList";
 import { TodoCard } from "./TodoCard";
 import { Button } from "@/components/ui/button";
@@ -75,7 +76,7 @@ export const TodoModal = ({ isOpen, onClose }: TodoModalProps) => {
         <DialogHeader className="px-6 pb-4 pt-6">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-2xl font-bold text-slate-50 flex items-center space-x-2">
-              <ListTodo className="w-6 h-6 text-purple-400" />
+              <Plus className="w-6 h-6 text-purple-400" />
               <span>Minhas Tarefas</span>
             </DialogTitle>
             <Button

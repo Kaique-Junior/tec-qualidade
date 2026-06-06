@@ -120,7 +120,7 @@ export default function DisciplinasPage() {
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-slate-50 mb-2">Disciplinas</h2>
             <p className="text-slate-400 text-lg">
-              Acesse quizzes de cada matéria separadamente.
+              
             </p>
           </div>
 

@@ -1,11 +1,12 @@
 # Contexto de Quizzes
 
-Este contexto gerencia toda a lógica relacionada a quizzes da plataforma KQUIZZ.
+Este contexto gerencia toda a lógica relacionada a quizzes da plataforma Técnico em Qualidade.
 
 ## Arquitetura
 
-- **QuizCard.tsx**: Componente de card para exibição de quizzes
-- **useQuizzesByDisciplina.ts**: Hook para buscar quizzes por disciplina específica
+- **components/QuizCard.tsx**: Componente para exibição de quizzes
+- **hooks/useQuizzesByDisciplina.ts**: Hook para buscar quizzes por disciplina
+- **types.ts**: Tipos para quizzes
 
 ## Dependências
 
@@ -15,4 +16,4 @@ Este contexto gerencia toda a lógica relacionada a quizzes da plataforma KQUIZZ
 
 ## Tabelas Utilizadas
 
-- `public.quizzes`: Armazena quizzes por disciplina (id, disciplina_id, titulo, url_link, descricao, created_at)
+- `public.quizzes`: Armazena quizzes por disciplina

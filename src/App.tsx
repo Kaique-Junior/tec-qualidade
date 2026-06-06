@@ -3,18 +3,26 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import Home from "./pages/Home";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
+import TodoPage from "./pages/TodoPage";
 import NotFound from "./pages/NotFound";
-import { TodoModal } from "./contexts/todolist/components/TodoModal";
-import { TodoFloatingButton } from "./contexts/todolist/components/TodoFloatingButton";
+import { useAuth } from "@/contexts/auth/hooks/useAuth";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
+  const { user, loading } = useAuth();
+
+  // Redirecionar não usuários para login
+  useEffect(() => {
+    if (!user && !loading) {
+      window.location.href = '/login';
+    }
+  }, [user, loading]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -23,20 +31,18 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            {/* Rota de Login */}
             <Route path="/login" element={<Login />} />
+            
+            {/* Rotas principais com redirecionamento automático */}
+            <Route path="/" element={<Index />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
+            <Route path="/todo" element={<TodoPage />} />
+            
+            {/* Rota 404 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          
-          {/* Botão flutuante de tarefas (aparece em todas as páginas exceto login) */}
-          <TodoFloatingButton onClick={() => setIsTodoModalOpen(true)} />
-          
-          {/* Modal de tarefas (aparece em todas as páginas exceto login) */}
-          <TodoModal 
-            isOpen={isTodoModalOpen} 
-            onClose={() => setIsTodoModalOpen(false)} 
-          />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

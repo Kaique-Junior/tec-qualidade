@@ -7,10 +7,6 @@ Realizada varredura completa no código-fonte para identificar exposição de ch
 
 ### 1. `src/integrations/supabase/client.ts`
 **Linha 3-4**: Contém URL e chave do Supabase hardcoded
-```typescript
-const SUPABASE_URL = "https://pwdmcdtjtnrnvidkfvsq.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3ZG1jZHRqdG5ybnZpZGtmdnNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTA2MDIsImV4cCI6MjA5NjE2NjYwMn0.jq5j27yGZP6AvjZyVs61SptmZs68ou4Pl1pbfFGyFkI";
-```
 
 ### 2. `src/App.tsx`
 **Linha 1**: Importação do componente toaster, mas não há chaves expostas neste arquivo.

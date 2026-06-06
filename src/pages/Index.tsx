@@ -160,13 +160,6 @@ export default function Index() {
                 <span className="text-lg sm:text-xl">Acessar Disciplinas e Quizzes</span>
               </button>
             </div>
-
-            {/* Mensagem de rodapé opcional */}
-            <div className="text-center">
-              <p className="text-sm text-slate-500 opacity-70">
-                Comece sua jornada de aprendizado hoje mesmo!
-              </p>
-            </div>
           </div>
         </div>
       </main>

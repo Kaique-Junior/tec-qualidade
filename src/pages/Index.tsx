@@ -140,7 +140,6 @@ export default function Index() {
               
               {/* Subtítulo explicativo */}
               <p className="text-lg sm:text-xl text-slate-400 text-center leading-relaxed">
-                
               </p>
             </div>
 

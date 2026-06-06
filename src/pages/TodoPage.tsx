@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Plus, ListTodo } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
+import { MobileNavbar } from "@/components/common/MobileNavbar";
 
 /**
  * Página completa da lista de tarefas (ToDo List).
@@ -16,10 +17,9 @@ import { useState } from "react";
  * - Botão de lixeira para deletar
  * - Estados de carregamento e feedback visual
  * 
- * Layout Corrigido:
- * - Estrutura de grid para evitar sobreposição com sidebar
- * - Conteúdo ocupa o restante da tela à direita (flex-1)
- * - Espaçamento adequado e consistente com outras páginas
+ * Layout Responsivo:
+ * - Mobile: Navbar com hamburguer e drawer
+ * - Desktop: Sidebar fixo com ml-64
  */
 export default function TodoPage() {
   const [newTodo, setNewTodo] = useState("");
@@ -33,6 +33,7 @@ export default function TodoPage() {
     isUpdating,
     isDeleting 
   } = useTodoList();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleAddTodo = () => {
     if (newTodo.trim()) {
@@ -57,10 +58,14 @@ export default function TodoPage() {
 
   return (
     <div className="min-h-screen bg-[#0b0f19] flex flex-col">
-      {/* Header - Removido para manter consistência com outras páginas que usam o header do App.tsx */}
-      
-      {/* Main content com estrutura de grid */}
-      <main className="flex-1 ml-64"> {/* ml-64 para compensar o sidebar fixo */}
+      {/* Mobile navbar */}
+      <MobileNavbar 
+        onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isOpen={isMobileMenuOpen}
+      />
+
+      {/* Desktop content */}
+      <main className="flex-1 ml-64 md:ml-64">
         <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           {/* Formulário de adicionar tarefa */}
           <div className="mb-8">

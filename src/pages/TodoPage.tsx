@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
+import { useTodoList } from "@/contexts/todolist/hooks/useTodoList";
 import { LogOut, Zap } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -7,18 +8,25 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
-import { BookOpen, CheckSquare, Trophy } from "lucide-react";
+import { TodoForm } from "@/contexts/todolist/components/TodoForm";
+import { TodoItem } from "@/contexts/todolist/components/TodoItem";
 
 /**
- * Página principal da plataforma KQUIZZ - Home moderna com grid de cards.
+ * Página de gerenciamento de tarefas do usuário.
  * 
- * Layout responsivo com título e dois cards principais.
- * Segue as diretrizes de design do projeto com cards integrados.
+ * Layout limpo e responsivo com:
+ * - Header padrão
+ * - Botão de voltar
+ * - Formulário de adicionar tarefas
+ * - Listas de tarefas ativas e concluídas
+ * - Estados vazios amigáveis
  */
-export default function Index() {
+export default function TodoPage() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  const { todos, completedTodos, isLoading, addTodo, toggleTodo, deleteTodo } = useTodoList();
 
   // Se o usuário não estiver autenticado, redireciona para o login
   if (!user && !loading) {
@@ -26,13 +34,13 @@ export default function Index() {
     return null;
   }
 
-  // Se estiver carregando autenticação, mostra tela de loading
-  if (loading) {
+  // Se estiver carregando autenticação ou tarefas, mostra tela de loading
+  if (loading || isLoading) {
     return (
       <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-slate-400">Carregando...</p>
+          <p className="mt-4 text-slate-400">Carregando tarefas...</p>
         </div>
       </div>
     );
@@ -47,12 +55,8 @@ export default function Index() {
     }
   };
 
-  const handleNavigateToDisciplinas = () => {
-    navigate('/disciplinas');
-  };
-
-  const handleNavigateToTodo = () => {
-    navigate('/todo');
+  const handleBackToHome = () => {
+    navigate('/');
   };
 
   return (
@@ -121,77 +125,73 @@ export default function Index() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        {/* Título principal e subtítulo */}
-        <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-50 mb-4 leading-tight">
-            Pronto para os estudos?
-          </h1>
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Sua plataforma de testes e simulados técnicos em Qualidade de Software.
-          </p>
-        </div>
-
-        {/* Grid de cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          {/* Card 1 - Disciplinas e Quizzes */}
+      <main className="flex-1 flex flex-col">
+        {/* Botão de voltar */}
+        <div className="py-4">
           <button
-            onClick={handleNavigateToDisciplinas}
-            className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"
+            onClick={handleBackToHome}
+            className="flex items-center space-x-2 text-purple-400 hover:text-purple-300 transition-colors px-4 py-2 rounded-lg hover:bg-slate-900/30"
           >
-            {/* Ícone */}
-            <div className="flex justify-center mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-30 scale-110 group-hover:opacity-50 transition-all duration-300"></div>
-                <div className="relative">
-                  <BookOpen className="w-12 h-12 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
-                </div>
-              </div>
-            </div>
-            
-            {/* Título */}
-            <h2 className="text-xl font-bold text-white text-center mb-3">
-              Disciplinas e Quizzes
-            </h2>
-            
-            {/* Descrição */}
-            <p className="text-slate-400 text-center text-sm">
-              Acesse os módulos e responda aos simulados.
-            </p>
-          </button>
-
-          {/* Card 2 - Minhas Tarefas */}
-          <button
-            onClick={handleNavigateToTodo}
-            className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"
-          >
-            {/* Ícone */}
-            <div className="flex justify-center mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-30 scale-110 group-hover:opacity-50 transition-all duration-300"></div>
-                <div className="relative">
-                  <CheckSquare className="w-12 h-12 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
-                </div>
-              </div>
-            </div>
-            
-            {/* Título */}
-            <h2 className="text-xl font-bold text-white text-center mb-3">
-              Minhas Tarefas
-            </h2>
-            
-            {/* Descrição */}
-            <p className="text-slate-400 text-center text-sm">
-              Organize sua rotina de estudos e metas.
-            </p>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Voltar para Funcionalidades</span>
           </button>
         </div>
 
-        {/* Rodapé com mensagem de incentivo */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-slate-500 opacity-70">
-            Comece sua jornada de aprendizado hoje mesmo!
-          </p>
+        {/* Conteúdo centralizado */}
+        <div className="max-w-xl mx-auto w-full px-4 mt-6 mb-8">
+          {/* Formulário de adicionar tarefa */}
+          <TodoForm onAddTodo={addTodo} isLoading={isLoading} />
+
+          {/* Lista de tarefas ativas */}
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-slate-50 mb-4">Tarefas Ativas</h2>
+            
+            {todos.length > 0 ? (
+              <div className="space-y-3">
+                {todos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                    isLoading={isLoading}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-slate-600 mb-4">
+                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-slate-50 mb-2">Nenhuma tarefa ativa</h3>
+                <p className="text-slate-400">
+                  Adicione novas tarefas para começar!
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Lista de tarefas concluídas */}
+          {completedTodos.length > 0 && (
+            <div>
+              <h2 className="text-xl font-bold text-slate-50 mb-4">Tarefas Concluídas</h2>
+              <div className="space-y-3">
+                {completedTodos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                    isLoading={isLoading}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
 

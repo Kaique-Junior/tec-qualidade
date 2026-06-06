@@ -108,9 +108,6 @@ export default function DisciplinasPage() {
           <div className="px-4 sm:px-0">
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-slate-50 mb-2 text-center">Disciplinas</h2>
-              <p className="text-slate-400 text-lg text-center">
-                Explore os módulos e simulados técnicos em Qualidade de Software
-              </p>
             </div>
 
             {disciplinas && disciplinas.length > 0 ? (

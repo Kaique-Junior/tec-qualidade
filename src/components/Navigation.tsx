@@ -8,6 +8,11 @@ import { cn } from "@/lib/utils";
  * Fornece links para as principais páginas da plataforma:
  * - Dashboard (página inicial)
  * - Minhas Tarefas (página de ToDo List)
+ * 
+ * Layout Corrigido:
+ * - Position fixo na esquerda
+ * - Width fixo de 16rem (w-64)
+ * - Não sobrepõe o conteúdo
  */
 export const Navigation = () => {
   const location = useLocation();

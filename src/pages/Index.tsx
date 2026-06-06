@@ -128,7 +128,7 @@ export default function Index() {
             Pronto para os estudos?
           </h1>
           <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Sua plataforma de testes e simulados técnicos em Qualidade de Software.
+            
           </p>
         </div>
 

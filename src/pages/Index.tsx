@@ -1,18 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
-import { LogOut, Zap, BookOpen, Trophy } from "lucide-react";
+import { LogOut, Zap } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
+import { BookOpen, CheckSquare, Trophy } from "lucide-react";
 
 /**
- * Página principal da plataforma KQUIZZ - Home de introdução.
+ * Página principal da plataforma KQUIZZ - Home moderna com grid de cards.
  * 
- * Design responsivo com mensagem de boas-vindas e botão principal.
- * Utiliza Flexbox para layout responsivo e espaçamento adequado.
+ * Layout responsivo com título e dois cards principais.
+ * Segue as diretrizes de design do projeto com cards integrados.
  */
 export default function Index() {
   const { user, loading, signOut } = useAuth();
@@ -46,8 +47,12 @@ export default function Index() {
     }
   };
 
-  const handleAccessDisciplinas = () => {
+  const handleNavigateToDisciplinas = () => {
     navigate('/disciplinas');
+  };
+
+  const handleNavigateToTodo = () => {
+    navigate('/todo');
   };
 
   return (
@@ -115,51 +120,78 @@ export default function Index() {
         </div>
       </header>
 
-      {/* Main content com Flexbox responsivo */}
-      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="w-full max-w-2xl mx-auto">
-          {/* Container principal com espaçamento adequado */}
-          <div className="flex flex-col items-center justify-center space-y-8 sm:space-y-12">
-            
-            {/* Mensagem de boas-vindas */}
-            <div className="text-center space-y-4 sm:space-y-6">
+      {/* Main content */}
+      <main className="flex-1 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+        {/* Título principal e subtítulo */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-50 mb-4 leading-tight">
+            Pronto para os estudos?
+          </h1>
+          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Sua plataforma de testes e simulados técnicos em Qualidade de Software.
+          </p>
+        </div>
+
+        {/* Grid de cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          {/* Card 1 - Disciplinas e Quizzes */}
+          <button
+            onClick={handleNavigateToDisciplinas}
+            className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"
+          >
+            {/* Ícone */}
+            <div className="flex justify-center mb-4">
               <div className="relative">
-                {/* Ícone decorativo com efeito de brilho */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full blur-lg opacity-60 scale-110"></div>
+                <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-30 scale-110 group-hover:opacity-50 transition-all duration-300"></div>
                 <div className="relative">
-                  <div className="w-20 h-20 bg-[#111827] rounded-full flex items-center justify-center border border-purple-500/30">
-                    <BookOpen className="w-10 h-10 text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.4)]" />
-                  </div>
+                  <BookOpen className="w-12 h-12 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
                 </div>
               </div>
-              
-              {/* Título principal marcante */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-center bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent leading-tight">
-                Pronto para os estudos?
-              </h1>
-              
-              {/* Subtítulo explicativo */}
-              <p className="text-lg sm:text-xl text-slate-400 text-center leading-relaxed">
-              </p>
             </div>
+            
+            {/* Título */}
+            <h2 className="text-xl font-bold text-white text-center mb-3">
+              Disciplinas e Quizzes
+            </h2>
+            
+            {/* Descrição */}
+            <p className="text-slate-400 text-center text-sm">
+              Acesse os módulos e responda aos simulados.
+            </p>
+          </button>
 
-            {/* Card/Botão de acesso principal */}
-            <div className="w-full max-w-md">
-              <button
-                onClick={handleAccessDisciplinas}
-                className="w-full bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] flex items-center justify-center space-x-3 group"
-              >
-                {/* Ícone do botão com animação */}
+          {/* Card 2 - Minhas Tarefas */}
+          <button
+            onClick={handleNavigateToTodo}
+            className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"
+          >
+            {/* Ícone */}
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-30 scale-110 group-hover:opacity-50 transition-all duration-300"></div>
                 <div className="relative">
-                  <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-50 scale-75 group-hover:scale-100 transition-all duration-300"></div>
-                  <Trophy className="relative w-6 h-6 text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]" />
+                  <CheckSquare className="w-12 h-12 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
                 </div>
-                
-                {/* Texto do botão */}
-                <span className="text-lg sm:text-xl">Disciplinas e Quizzes</span>
-              </button>
+              </div>
             </div>
-          </div>
+            
+            {/* Título */}
+            <h2 className="text-xl font-bold text-white text-center mb-3">
+              Minhas Tarefas
+            </h2>
+            
+            {/* Descrição */}
+            <p className="text-slate-400 text-center text-sm">
+              Organize sua rotina de estudos e metas.
+            </p>
+          </button>
+        </div>
+
+        {/* Rodapé com mensagem de incentivo */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-slate-500 opacity-70">
+            Comece sua jornada de aprendizado hoje mesmo!
+          </p>
         </div>
       </main>
 

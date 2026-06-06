@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { Footer } from "@/components/Footer";
 import { TodoForm } from "@/contexts/todolist/components/TodoForm";
 import { TodoItem } from "@/contexts/todolist/components/TodoItem";
-import { useState } from "react";
 
 /**
  * Página de gerenciamento de tarefas do usuário com funcionalidade completa.

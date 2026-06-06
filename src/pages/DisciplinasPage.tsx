@@ -118,7 +118,7 @@ export default function DisciplinasPage() {
       <main className="flex-1 max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-50 mb-2">Disciplinas</h2>
+            <h2 className="text-3xl font-bold text-slate-50 mb-2 text-center">Disciplinas</h2>
             <p className="text-slate-400 text-lg">
               
             </p>

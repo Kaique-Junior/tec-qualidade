@@ -36,10 +36,6 @@ export function useAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user ?? null);
-        // Redirecionar para raiz após login bem-sucedido
-        if (event === 'SIGNED_IN') {
-          window.location.href = '/';
-        }
       }
     );
 

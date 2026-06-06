@@ -96,8 +96,3 @@ O projeto é dividido em contextos funcionais em `src/contexts/<nome>/`. Cada co
 - `src/integrations/supabase/client.ts` — cliente Supabase
 - `supabase/migrations/*` — nunca alterar migrations existentes, apenas criar novas
 - `.env` — nunca tocar
-
----
-
-## TELA DE LOGIN - Não deve ser alterada sem permissão
-- Não mexer na tela de login, a menos que seja enviado o comando "login"

@@ -24,8 +24,8 @@ export default function DisciplinaPage() {
     disciplinaId: disciplina?.id 
   });
 
-  const handleBackToHome = () => {
-    navigate("/home");
+  const handleBackToDashboard = () => {
+    navigate("/");
   };
 
   // Se estiver carregando disciplina ou quizzes, mostra tela de loading
@@ -49,10 +49,10 @@ export default function DisciplinaPage() {
             <h2 className="text-2xl font-bold text-slate-50 mb-4">Disciplina não encontrada</h2>
             <p className="text-slate-400 mb-6">A disciplina que você procura não existe.</p>
             <button
-              onClick={handleBackToHome}
+              onClick={handleBackToDashboard}
               className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white px-6 py-2 rounded-lg transition-all duration-200 shadow-[0_0_10px_rgba(168,85,247,0.1)]"
             >
-              Voltar para a Home
+              Voltar ao Painel
             </button>
           </div>
         </div>
@@ -62,16 +62,16 @@ export default function DisciplinaPage() {
 
   return (
     <div className="min-h-screen bg-[#0b0f19] flex flex-col">
-      {/* Header com botão de voltar */}
+      {/* Header */}
       <header className="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <button
-              onClick={handleBackToHome}
+              onClick={handleBackToDashboard}
               className="flex items-center space-x-2 text-slate-400 hover:text-purple-400 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Voltar para a Home</span>
+              <span>Voltar</span>
             </button>
             <div className="flex items-center space-x-2">
               <Zap className="w-6 h-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
@@ -134,10 +134,10 @@ export default function DisciplinaPage() {
                     Fique de olho! Em breve novos quizzes serão disponibilizados.
                   </p>
                   <button
-                    onClick={handleBackToHome}
+                    onClick={handleBackToDashboard}
                     className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white px-6 py-2 rounded-lg transition-all duration-200 shadow-[0_0_10px_rgba(168,85,247,0.1)]"
                   >
-                    Voltar para a Home
+                    Voltar ao Painel
                   </button>
                 </div>
               )}

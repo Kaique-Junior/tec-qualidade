@@ -157,7 +157,7 @@ export default function Index() {
                 </div>
                 
                 {/* Texto do botão */}
-                <span className="text-lg sm:text-xl">Acessar Disciplinas e Quizzes</span>
+                <span className="text-lg sm:text-xl">Disciplinas e Quizzes</span>
               </button>
             </div>
           </div>

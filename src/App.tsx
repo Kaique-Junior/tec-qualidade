@@ -6,7 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
+import TodoPage from "./pages/TodoPage";
 import NotFound from "./pages/NotFound";
+import { Navigation } from "./components/Navigation";
 
 const queryClient = new QueryClient();
 
@@ -16,10 +18,12 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Navigation />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
+          <Route path="/todo" element={<TodoPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

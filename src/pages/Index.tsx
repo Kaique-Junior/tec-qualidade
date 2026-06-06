@@ -80,11 +80,8 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Lado direito - Usuário e Logout */}
+          {/* Lado direito - Apenas logout */}
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-slate-400 hidden md:block">
-              Bem-vindo, {user?.email || "Usuário"}!
-            </span>
             <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
               <DialogTrigger asChild>
                 <button className="text-purple-400 hover:text-purple-300 transition-colors p-1">
@@ -185,13 +182,6 @@ export default function Index() {
               Organize sua rotina de estudos e metas.
             </p>
           </button>
-        </div>
-
-        {/* Rodapé com mensagem de incentivo */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-slate-500 opacity-70">
-            Comece sua jornada de aprendizado hoje mesmo!
-          </p>
         </div>
       </main>
 

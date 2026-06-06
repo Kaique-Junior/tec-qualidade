@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { useTodoList } from "@/contexts/todolist/hooks/useTodoList";
-import { LogOut, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -84,42 +84,11 @@ export default function TodoPage() {
             </div>
           </div>
 
-          {/* Lado direito - Usuário e Logout */}
+          {/* Lado direito - Apenas mensagem de boas-vindas sem logout */}
           <div className="flex items-center space-x-2">
             <span className="text-sm text-slate-400 hidden md:block">
               Bem-vindo, {user?.email || "Usuário"}!
             </span>
-            <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-              <DialogTrigger asChild>
-                <button className="text-purple-400 hover:text-purple-300 transition-colors p-1">
-                  <LogOut className="w-4 h-4 md:hidden" />
-                  <span className="hidden md:inline ml-1">Logout</span>
-                </button>
-              </DialogTrigger>
-              <DialogContent className="bg-[#111827] border border-slate-800">
-                <DialogHeader>
-                  <DialogTitle className="text-slate-50">Confirmar Saída</DialogTitle>
-                  <DialogDescription className="text-slate-400">
-                    Deseja realmente sair da plataforma?
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowLogoutDialog(false)}
-                    className="border-slate-700 text-slate-400 hover:bg-slate-800"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={handleLogout}
-                    className="bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600"
-                  >
-                    Sair
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
           </div>
         </div>
       </header>

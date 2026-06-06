@@ -125,7 +125,7 @@ export default function Index() {
         {/* Título principal e subtítulo */}
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-50 mb-4 leading-tight">
-            Portais
+            FUNCIONALIDADES
           </h1>
         </div>
 

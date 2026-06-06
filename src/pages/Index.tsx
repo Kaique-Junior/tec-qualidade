@@ -127,9 +127,6 @@ export default function Index() {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-50 mb-4 leading-tight">
             Pronto para os estudos?
           </h1>
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            
-          </p>
         </div>
 
         {/* Grid de cards */}

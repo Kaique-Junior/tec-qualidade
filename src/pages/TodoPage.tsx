@@ -7,26 +7,36 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Footer } from "@/components/Footer";
-import { useState } from "react";
 import { TodoForm } from "@/contexts/todolist/components/TodoForm";
 import { TodoItem } from "@/contexts/todolist/components/TodoItem";
 
 /**
- * Página de gerenciamento de tarefas do usuário.
+ * Página de gerenciamento de tarefas do usuário com funcionalidade completa.
  * 
  * Layout limpo e responsivo com:
  * - Header padrão
  * - Botão de voltar
- * - Formulário de adicionar tarefas
+ * - Formulário de adicionar tarefas com data de prazo
  * - Listas de tarefas ativas e concluídas
  * - Estados vazios amigáveis
+ * - Edição inline de tarefas
+ * - Contador de prazo
  */
 export default function TodoPage() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
-  const { todos, completedTodos, isLoading, addTodo, toggleTodo, deleteTodo } = useTodoList();
+  const { 
+    todos, 
+    completedTodos, 
+    isLoading, 
+    addTodo, 
+    toggleTodo, 
+    editTodo, 
+    deleteTodo, 
+    getDaysRemaining 
+  } = useTodoList();
 
   // Se o usuário não estiver autenticado, redireciona para o login
   if (!user && !loading) {
@@ -124,7 +134,9 @@ export default function TodoPage() {
                     key={todo.id}
                     todo={todo}
                     onToggle={toggleTodo}
+                    onEdit={editTodo}
                     onDelete={deleteTodo}
+                    getDaysRemaining={getDaysRemaining}
                     isLoading={isLoading}
                   />
                 ))}
@@ -154,7 +166,9 @@ export default function TodoPage() {
                     key={todo.id}
                     todo={todo}
                     onToggle={toggleTodo}
+                    onEdit={editTodo}
                     onDelete={deleteTodo}
+                    getDaysRemaining={getDaysRemaining}
                     isLoading={isLoading}
                   />
                 ))}

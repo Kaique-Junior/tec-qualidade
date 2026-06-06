@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
 import TodoPage from "./pages/TodoPage";
-import NotFound from "./pages/NotFound";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { useEffect } from "react";
 
@@ -45,9 +44,6 @@ const App = () => {
             
             {/* Rota dinâmica para quizzes de disciplina */}
             <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
-            
-            {/* Rota 404 */}
-            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

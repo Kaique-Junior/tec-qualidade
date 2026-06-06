@@ -9,20 +9,47 @@ import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
 import TodoPage from "./pages/TodoPage";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
-import { useEffect } from "react";
+import { Suspense } from "react";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const { user, loading } = useAuth();
 
-  // Redirecionar não usuários para login
-  useEffect(() => {
-    if (!user && !loading) {
-      window.location.href = '/login';
-    }
-  }, [user, loading]);
+  // Se estiver carregando o estado de autenticação, mostra tela de carregamento
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-slate-400">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
+  // Se não houver usuário, renderiza as rotas públicas (login e home)
+  if (!user) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/disciplinas" element={<Index />} />
+              <Route path="/todo" element={<TodoPage />} />
+              <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  }
+
+  // Se houver usuário, renderiza as rotas privadas
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -30,20 +57,11 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Rota de Login */}
-            <Route path="/login" element={<Login />} />
-            
-            {/* Rotas principais - raiz agora é a tela de introdução */}
             <Route path="/" element={<Home />} />
-            
-            {/* Rota de disciplinas */}
             <Route path="/disciplinas" element={<Index />} />
-            
-            {/* Rota de ToDo List */}
             <Route path="/todo" element={<TodoPage />} />
-            
-            {/* Rota dinâmica para quizzes de disciplina */}
             <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
+            <Route path="/login" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

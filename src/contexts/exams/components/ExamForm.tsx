@@ -6,7 +6,7 @@ import { Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ExamFormProps {
-  onAddExam: (title: string, exam_date: string, description?: string) => void;
+  onAddExam: (examData: { title: string; exam_date: string; description?: string }) => void;
   isLoading?: boolean;
 }
 
@@ -23,7 +23,11 @@ export const ExamForm = ({ onAddExam, isLoading }: ExamFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim() && examDate) {
-      onAddExam(title.trim(), examDate, description.trim() || undefined);
+      onAddExam({
+        title: title.trim(),
+        exam_date: examDate,
+        description: description.trim() || undefined
+      });
       setTitle("");
       setExamDate("");
       setDescription("");

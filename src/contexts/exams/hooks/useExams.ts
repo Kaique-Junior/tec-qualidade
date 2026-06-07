@@ -36,15 +36,17 @@ export function useExams() {
     },
   });
 
-  // Adicionar nova prova
+  // Adicionar nova prova - formato correto do insert
   const { mutate: addExam } = useMutation({
-    mutationFn: async (examData: Omit<Exam, "id" | "user_id" | "created_at">) => {
+    mutationFn: async (examData: { title: string; exam_date: string; description?: string }) => {
       try {
         const { data, error } = await supabase
           .from("exams")
           .insert({
-            ...examData,
             user_id: (await supabase.auth.getUser()).data.user?.id,
+            title: examData.title,
+            exam_date: examData.exam_date,
+            description: examData.description || null
           })
           .select()
           .single();

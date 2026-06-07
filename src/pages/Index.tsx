@@ -1,18 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
-import { LogOut, Zap } from "lucide-react";
+import { LogOut, Zap, BookOpen, CheckSquare, Calendar } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
-import { BookOpen, CheckSquare, Trophy } from "lucide-react";
 
 /**
  * Página principal da plataforma KQUIZZ - Home moderna com grid de cards.
  * 
- * Layout responsivo com título e dois cards principais.
+ * Layout responsivo com título e três cards principais.
  * Segue as diretrizes de design do projeto com cards integrados.
  */
 export default function Index() {
@@ -55,12 +54,16 @@ export default function Index() {
     navigate('/todo');
   };
 
+  const handleNavigateToExams = () => {
+    navigate('/provas');
+  };
+
   return (
     <div className="min-h-screen bg-[#0b0f19] flex flex-col">
       {/* Header */}
       <header className="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-3">
-          {/* Lado esquerdo */}
+          {/* Lado esquerdo - Logo KQUIZZ */}
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">KQ</span>
@@ -73,15 +76,16 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Centro - Raio */}
-          <div className="flex-1 flex justify-center mb-4 md:mb-0">
-            <div className="relative">
-              <Zap className="w-8 h-8 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
-            </div>
+          {/* Centro - Ícone Zap */}
+          <div className="flex items-center">
+            <Zap className="w-8 h-8 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
           </div>
 
-          {/* Lado direito - Apenas logout */}
+          {/* Lado direito - Usuário e Logout */}
           <div className="flex items-center space-x-2">
+            <span className="text-sm text-slate-400 hidden md:block">
+              Bem-vindo, {user?.email || "Usuário"}!
+            </span>
             <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
               <DialogTrigger asChild>
                 <button className="text-purple-400 hover:text-purple-300 transition-colors p-1">
@@ -129,8 +133,8 @@ export default function Index() {
           </p>
         </div>
 
-        {/* Grid de cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        {/* Grid de cards - agora com 3 colunas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
           {/* Card 1 - Disciplinas e Quizzes */}
           <button
             onClick={handleNavigateToDisciplinas}
@@ -180,6 +184,32 @@ export default function Index() {
             {/* Descrição */}
             <p className="text-slate-400 text-center text-sm">
               Organize sua rotina de estudos e metas.
+            </p>
+          </button>
+
+          {/* Card 3 - Calendário de Provas */}
+          <button
+            onClick={handleNavigateToExams}
+            className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"
+          >
+            {/* Ícone */}
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-30 scale-110 group-hover:opacity-50 transition-all duration-300"></div>
+                <div className="relative">
+                  <Calendar className="w-12 h-12 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
+                </div>
+              </div>
+            </div>
+            
+            {/* Título */}
+            <h2 className="text-xl font-bold text-white text-center mb-3">
+              Calendário de Provas
+            </h2>
+            
+            {/* Descrição */}
+            <p className="text-slate-400 text-center text-sm">
+              Monitore suas datas importantes e avaliações.
             </p>
           </button>
         </div>

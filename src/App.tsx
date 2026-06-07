@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import DisciplinasPage from "./pages/DisciplinasPage";
 import TodoPage from "./pages/TodoPage";
+import ExamsPage from "./pages/ExamsPage";
 import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
@@ -60,6 +61,7 @@ const App = () => {
             <Route path="/disciplinas" element={<DisciplinasPage />} />
             <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
             <Route path="/todo" element={<TodoPage />} />
+            <Route path="/provas" element={<ExamsPage />} />
             <Route path="/login" element={<Index />} />
           </Routes>
         </BrowserRouter>

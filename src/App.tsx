@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/next";
 import Index from "./pages/Index";
 import DisciplinasPage from "./pages/DisciplinasPage";
 import TodoPage from "./pages/TodoPage";
@@ -36,6 +37,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          <Analytics />
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -55,6 +57,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <Analytics />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />

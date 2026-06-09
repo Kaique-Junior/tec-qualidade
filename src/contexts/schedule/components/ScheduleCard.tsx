@@ -13,7 +13,7 @@ interface ScheduleCardProps {
  * Componente de card para exibir o horário do dia atual.
  * 
  * Exibe data, dia da semana, matérias e badges especiais.
- * Renderiza dinamicamente as siglas de disciplinas para nomes completos.
+ * Renderiza apenas os 2 primeiros períodos de aula (13:00-14:40 e 15:00-16:30).
  */
 export const ScheduleCard = ({ schedule, className }: ScheduleCardProps) => {
   // Dicionário de tradução estático para siglas
@@ -68,13 +68,10 @@ export const ScheduleCard = ({ schedule, className }: ScheduleCardProps) => {
     return null;
   };
 
-  // Obter horários das aulas (13:00 às 17:30)
+  // Limitar apenas os 2 primeiros períodos de aula
   const classTimes = [
-    { time: "13:00 - 14:30", period: "1ª Aula" },
-    { time: "14:45 - 16:15", period: "2ª Aula" },
-    { time: "16:30 - 18:00", period: "3ª Aula" },
-    { time: "18:15 - 19:45", period: "4ª Aula" },
-    { time: "20:00 - 21:30", period: "5ª Aula" },
+    { time: "13:00 - 14:40", period: "1º Período" },
+    { time: "15:00 - 16:30", period: "2º Período" }
   ];
 
   return (
@@ -106,7 +103,7 @@ export const ScheduleCard = ({ schedule, className }: ScheduleCardProps) => {
           </div>
         )}
 
-        {/* Lista de aulas */}
+        {/* Lista de aulas - apenas 2 períodos */}
         {schedule.subjects && schedule.subjects.length > 0 ? (
           <div className="space-y-3">
             {classTimes.map((classTime, index) => {

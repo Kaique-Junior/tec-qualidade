@@ -28,7 +28,8 @@ export const ScheduleCard = ({ schedule, className }: ScheduleCardProps) => {
     'DA': 'Desenho Auxiliado',
     'GA': 'Gestão Ambiental',
     'GHO': 'Gestão de Higiene e Ocupacional',
-    'CHR': 'Carga Horária Restante'
+    'CHR': 'Carga Horária Restante',
+    'GPQ': 'Gestão da Qualidade'
   };
 
   // Função para obter nome da disciplina ou fallback

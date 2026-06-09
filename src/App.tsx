@@ -9,6 +9,7 @@ import TodoPage from "./pages/TodoPage";
 import ExamsPage from "./pages/ExamsPage";
 import Login from "./pages/Login";
 import DisciplinaPage from "./pages/DisciplinaPage";
+import SchedulePage from "./pages/SchedulePage";
 import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { Suspense } from "react";
 
@@ -62,6 +63,7 @@ const App = () => {
             <Route path="/disciplina/:slug" element={<DisciplinaPage />} />
             <Route path="/todo" element={<TodoPage />} />
             <Route path="/provas" element={<ExamsPage />} />
+            <Route path="/calendario" element={<SchedulePage />} />
             <Route path="/login" element={<Index />} />
           </Routes>
         </BrowserRouter>

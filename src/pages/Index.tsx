@@ -58,6 +58,10 @@ export default function Index() {
     navigate('/provas');
   };
 
+  const handleNavigateToSchedule = () => {
+    navigate('/calendario');
+  };
+
   return (
     <div className="min-h-screen bg-[#0b0f19] flex flex-col">
       {/* Header */}
@@ -133,8 +137,8 @@ export default function Index() {
           </p>
         </div>
 
-        {/* Grid de cards - agora com 3 colunas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+        {/* Grid de cards - agora com 4 colunas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
           {/* Card 1 - Disciplinas e Quizzes */}
           <button
             onClick={handleNavigateToDisciplinas}
@@ -187,7 +191,33 @@ export default function Index() {
             </p>
           </button>
 
-          {/* Card 3 - Calendário de Provas */}
+          {/* Card 3 - Calendário Escolar */}
+          <button
+            onClick={handleNavigateToSchedule}
+            className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"
+          >
+            {/* Ícone */}
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-purple-500 rounded-full blur-md opacity-30 scale-110 group-hover:opacity-50 transition-all duration-300"></div>
+                <div className="relative">
+                  <Calendar className="w-12 h-12 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
+                </div>
+              </div>
+            </div>
+            
+            {/* Título */}
+            <h2 className="text-xl font-bold text-white text-center mb-3">
+              Horário das Aulas
+            </h2>
+            
+            {/* Descrição */}
+            <p className="text-slate-400 text-center text-sm">
+              Veja as disciplinas e eventos agendados para o dia de hoje.
+            </p>
+          </button>
+
+          {/* Card 4 - Calendário de Provas */}
           <button
             onClick={handleNavigateToExams}
             className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 hover:bg-slate-900/70 transition-all duration-300 transform hover:-translate-y-1 group"

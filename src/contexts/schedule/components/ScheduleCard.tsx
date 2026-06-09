@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock } from "lucide-react";
+import { Clock, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AcademicSchedule } from "../types";
-import { SUBJECT_MAPPING } from "../types";
 
 interface ScheduleCardProps {
   schedule: AcademicSchedule;
@@ -14,8 +13,29 @@ interface ScheduleCardProps {
  * Componente de card para exibir o horário do dia atual.
  * 
  * Exibe data, dia da semana, matérias e badges especiais.
+ * Renderiza dinamicamente as siglas de disciplinas para nomes completos.
  */
 export const ScheduleCard = ({ schedule, className }: ScheduleCardProps) => {
+  // Dicionário de tradução estático para siglas
+  const disciplineMap: Record<string, string> = {
+    'GPRO': 'Gestão de Produção',
+    'EM': 'Economia e Mercado',
+    'FDQ': 'Ferramentas da Qualidade',
+    'FOO': 'Ferramentas da Qualidade',
+    'QA': 'Qualidade Ambiental',
+    'GP': 'Gestão de Pessoas',
+    'PT': 'Português Instrumental',
+    'DA': 'Desenho Auxiliado',
+    'GA': 'Gestão Ambiental',
+    'GHO': 'Gestão de Higiene e Ocupacional',
+    'CHR': 'Carga Horária Restante'
+  };
+
+  // Função para obter nome da disciplina ou fallback
+  const getDisciplineName = (sigla: string): string => {
+    return disciplineMap[sigla] || sigla;
+  };
+
   const formatDate = schedule.date;
   const dayOfWeek = schedule.day_of_week;
   
@@ -87,28 +107,37 @@ export const ScheduleCard = ({ schedule, className }: ScheduleCardProps) => {
         )}
 
         {/* Lista de aulas */}
-        {schedule.subjects.length > 0 ? (
+        {schedule.subjects && schedule.subjects.length > 0 ? (
           <div className="space-y-3">
             {classTimes.map((classTime, index) => {
               const subject = schedule.subjects[index];
-              const subjectName = subject ? SUBJECT_MAPPING[subject] || subject : "";
+              const subjectName = subject ? getDisciplineName(subject) : "";
               
               return (
-                <div key={index} className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg">
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-purple-400">
-                      {classTime.period}
-                    </span>
-                    <p className="text-slate-50 font-medium">
-                      {classTime.time}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    {subject && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-950/60 text-purple-300 border border-purple-800/40">
-                        {subjectName}
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-800/50 border border-slate-700 rounded-lg">
+                  {/* Indicador visual esquerdo com ícone */}
+                  <div className="flex items-center space-x-3 flex-1">
+                    <div className="flex-shrink-0">
+                      <div className="w-1 h-full bg-purple-500/30 rounded-full"></div>
+                    </div>
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-purple-400">
+                        {classTime.period}
                       </span>
-                    )}
+                      <p className="text-slate-50 font-medium">
+                        {classTime.time}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      {subject && (
+                        <div className="flex items-center space-x-2">
+                          <BookOpen className="w-4 h-4 text-purple-400" />
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-950/60 text-purple-300 border border-purple-800/40">
+                            {subjectName}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               );

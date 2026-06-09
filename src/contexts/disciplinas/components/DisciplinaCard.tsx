@@ -63,7 +63,7 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
             onClick={handleAccessQuizzes}
             className="w-full bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white rounded-lg transition-all duration-300"
           >
-            Acessar Quizzes
+            Acessar
           </Button>
         </div>
       </div>

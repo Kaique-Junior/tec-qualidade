@@ -112,12 +112,12 @@ export default function DisciplinaPage() {
                         </p>
                       )}
                       
-                      {/* Botão iniciar quiz */}
+                      {/* Botão acessar quiz */}
                       <button 
                         onClick={() => window.open(quiz.url_link, "_blank")}
                         className="bg-gradient-to-r from-purple-800 to-indigo-700 hover:from-purple-700 hover:to-indigo-600 text-white font-medium rounded-lg py-2 px-4 w-full transition-all duration-200 shadow-[0_0_10px_rgba(168,85,247,0.1)]"
                       >
-                        Iniciar Quiz
+                        Acessar
                       </button>
                     </div>
                   ))}

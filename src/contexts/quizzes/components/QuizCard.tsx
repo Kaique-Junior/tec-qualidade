@@ -51,7 +51,7 @@ export const QuizCard = ({ quiz, className }: QuizCardProps) => {
           onClick={handleStartQuiz}
           className="w-full bg-green-600 hover:bg-green-700 text-white"
         >
-          Iniciar Quiz
+          Acessar
         </Button>
       </CardContent>
     </Card>

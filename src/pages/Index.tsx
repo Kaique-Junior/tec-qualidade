@@ -87,9 +87,6 @@ export default function Index() {
 
           {/* Lado direito - Usuário e Logout */}
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-slate-400 hidden md:block">
-              Bem-vindo, {user?.email || "Usuário"}!
-            </span>
             <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
               <DialogTrigger asChild>
                 <button className="text-purple-400 hover:text-purple-300 transition-colors p-1">

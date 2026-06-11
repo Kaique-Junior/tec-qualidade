@@ -80,6 +80,7 @@ O projeto é dividido em contextos funcionais em `src/contexts/<nome>/`. Cada co
 - Nunca expor `service_role` key no front-end. Apenas `anon` key.
 - Supabase client: somente `src/integrations/supabase/client.ts`.
 - Nunca commitar direto na `main`. Branches: `feature/*`, `fix/*`, `release/*`.
+- Nunca realizar hardcode
 
 ---
 

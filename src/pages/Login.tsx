@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { GoogleButton } from "@/contexts/auth/components/GoogleButton";
-import { Loader2, Mail, Lock, User } from "lucide-react";
+import { Loader2, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -16,6 +16,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showEmailSent, setShowEmailSent] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -47,8 +48,9 @@ export default function LoginPage() {
 
         if (error) throw error;
 
-        toast.success("Conta criada com sucesso! Verifique seu e-mail para confirmar.");
-        navigate("/");
+        // Sucesso no cadastro - mostrar mensagem de verificação de e-mail
+        setShowEmailSent(true);
+        toast.success("Conta criada! Verifique seu e-mail para confirmar.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: formData.email,
@@ -75,7 +77,63 @@ export default function LoginPage() {
   const handleTabChange = (tab: "signin" | "signup") => {
     setIsSignUp(tab === "signup");
     setFormData({ email: "", password: "", confirmPassword: "" });
+    setShowEmailSent(false);
   };
+
+  const handleBackToLogin = () => {
+    setShowEmailSent(false);
+    setIsSignUp(false);
+    setFormData({ email: "", password: "", confirmPassword: "" });
+  };
+
+  // Tela de confirmação de e-mail enviado
+  if (showEmailSent) {
+    return (
+      <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-[#111827] rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+          <div className="p-8 text-center">
+            {/* Ícone de carta com animação */}
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-purple-400/20 rounded-full blur-md animate-pulse"></div>
+                <Mail className="w-16 h-16 text-purple-400 drop-shadow-[0_0_12px_rgba(168,85,247,0.6)] animate-pulse relative" />
+              </div>
+            </div>
+
+            {/* Título */}
+            <h2 className="text-xl font-bold text-white mb-2">Verifique seu e-mail!</h2>
+
+            {/* Texto de instrução */}
+            <p className="text-sm text-slate-400 text-center mb-8 max-w-sm mx-auto">
+              Enviamos um link de confirmação para o e-mail digitado. Acesse sua caixa de entrada (ou spam) para ativar sua conta do KQUIZZ.
+            </p>
+
+            {/* Botão de retorno */}
+            <button
+              onClick={handleBackToLogin}
+              className="text-purple-400 hover:text-purple-300 text-sm underline transition-colors flex items-center justify-center gap-1 mx-auto"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Voltar ao login
+            </button>
+
+            {/* Divisor visual */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-800" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-[#111827] text-slate-500">ou continue com</span>
+              </div>
+            </div>
+
+            {/* Botão do Google */}
+            <GoogleButton />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center p-4">

@@ -106,43 +106,53 @@ export default function TodoPage() {
     }
   };
 
-  // Função para calcular dias restantes
-  const getDaysRemaining = (dueDate: string | null) => {
-    if (!dueDate) return null;
+  // Função para calcular dias restantes (desconsiderando horas)
+  const getDaysRemaining = (duoDateStr: string) => {
+    if (!duoDateStr) return null;
     
+    // Define a data atual (hoje) zerando as horas para o cálculo ser exato por dias
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const due = new Date(dueDate);
-    due.setHours(0, 0, 0, 0);
     
-    const diffTime = due.getTime() - today.getTime();
+    // Parse do prazo vindo do banco (duo_date)
+    const deadline = new Date(duoDateStr);
+    deadline.setHours(0, 0, 0, 0);
+    
+    // Diferença em milissegundos convertida para dias
+    const diffTime = deadline.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     return diffDays;
   };
 
-  // Função para obter badge de prazo
+  // Função para obter badge de prazo com estilos premium
   const getDueDateBadge = (dueDate: string | null) => {
-    const days = getDaysRemaining(dueDate);
+    const days = getDaysRemaining(dueDate || "");
     
     if (days === null) return null;
     
-    if (days > 0) {
+    if (days > 1) {
       return (
-        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
-          Faltam {days} {days === 1 ? "dia" : "dias"}
+        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
+          Faltam {days} dias
+        </span>
+      );
+    } else if (days === 1) {
+      return (
+        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          Falta 1 dia (Amanhã!)
         </span>
       );
     } else if (days === 0) {
       return (
-        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-amber-950/60 text-amber-400 border border-amber-800/40 animate-pulse">
-          Prazo encerra hoje!
+        <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
+          🚨 Termina hoje!
         </span>
       );
     } else {
       return (
-        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-rose-950/60 text-rose-400 border border-rose-800/40">
-          Atrasada há {Math.abs(days)} {Math.abs(days) === 1 ? "dia" : "dias"}
+        <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-rose-950/40 text-rose-500 border border-rose-500/20">
+          ⚠️ Atrasada há {Math.abs(days)} {Math.abs(days) === 1 ? "dia" : "dias"}
         </span>
       );
     }
@@ -245,7 +255,7 @@ export default function TodoPage() {
                         ) : null}
                       </button>
 
-                      {/* Texto da tarefa */}
+                      {/* Texto da tarefa + Badge de prazo */}
                       <div className="flex-1 min-w-0">
                         <span
                           className={cn(

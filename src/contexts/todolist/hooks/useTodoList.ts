@@ -37,25 +37,35 @@ export function useTodoList() {
 
   // Adicionar nova tarefa
   const { mutate: addTodo } = useMutation({
-    mutationFn: async (title: string) => {
+    mutationFn: async ({ title, dueDate }: { title: string; dueDate?: string }) => {
       try {
+        const user = (await supabase.auth.getUser()).data.user;
+        if (!user) throw new Error("Usuário não autenticado");
+
+        const insertData: any = {
+          title,
+          user_id: user.id,
+          is_completed: false,
+        };
+
+        // Se houver data de prazo, adiciona no formato YYYY-MM-DD
+        if (dueDate) {
+          insertData.duo_date = dueDate;
+        }
+
         const { data, error } = await supabase
           .from("todolist")
-          .insert({
-            title,
-            user_id: (await supabase.auth.getUser()).data.user?.id,
-          })
-          .select()
-          .single();
+          .insert([insertData])
+          .select();
 
         if (error) throw new Error(error.message);
-        return data;
+        return data?.[0];
       } catch (error) {
         toast.error("Erro ao adicionar tarefa: " + (error as Error).message);
         throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: (newTodo) => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       toast.success("Tarefa adicionada com sucesso!");
     },

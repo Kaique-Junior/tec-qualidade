@@ -81,7 +81,7 @@ export default function TodoPage() {
 
   const handleSubmitTask = () => {
     if (newTaskTitle.trim()) {
-      addTodo(newTaskTitle.trim());
+      addTodo({ title: newTaskTitle.trim(), dueDate: newTaskDueDate || undefined });
       handleCloseModal();
     }
   };
@@ -106,56 +106,47 @@ export default function TodoPage() {
     }
   };
 
-  // Função para calcular dias restantes (desconsiderando horas)
+  // Função para calcular dias restantes (forçando fuso horário local)
   const getDaysRemaining = (duoDateStr: string) => {
     if (!duoDateStr) return null;
     
-    // Define a data atual (hoje) zerando as horas para o cálculo ser exato por dias
+    // Força o split por hífen para evitar que o JS jogue para o fuso UTC meia-noite
+    const [year, month, day] = duoDateStr.split('-').map(Number);
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // Parse do prazo vindo do banco (duo_date)
-    const deadline = new Date(duoDateStr);
+    // Criando a data de prazo no fuso local do navegador
+    const deadline = new Date(year, month - 1, day);
     deadline.setHours(0, 0, 0, 0);
     
-    // Diferença em milissegundos convertida para dias
     const diffTime = deadline.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     return diffDays;
   };
 
-  // Função para obter badge de prazo com estilos premium
-  const getDueDateBadge = (dueDate: string | null) => {
-    const days = getDaysRemaining(dueDate || "");
+  // Função para renderizar badge de dias restantes
+  const renderDueDateBadge = (duoDate: string | null) => {
+    if (!duoDate) {
+      return <span className="text-[11px] text-slate-500 mt-0.5">📅 Sem prazo definido</span>;
+    }
     
-    if (days === null) return null;
+    const days = getDaysRemaining(duoDate);
+    if (days === null) {
+      return <span className="text-[11px] text-slate-500 mt-0.5">Erro ao calcular data</span>;
+    }
     
     if (days > 1) {
-      return (
-        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
-          Faltam {days} dias
-        </span>
-      );
-    } else if (days === 1) {
-      return (
-        <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-          Falta 1 dia (Amanhã!)
-        </span>
-      );
-    } else if (days === 0) {
-      return (
-        <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
-          🚨 Termina hoje!
-        </span>
-      );
-    } else {
-      return (
-        <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-rose-950/40 text-rose-500 border border-rose-500/20">
-          ⚠️ Atrasada há {Math.abs(days)} {Math.abs(days) === 1 ? "dia" : "dias"}
-        </span>
-      );
+      return <span className="text-[11px] text-purple-400 mt-0.5">📅 Faltam {days} dias</span>;
     }
+    if (days === 1) {
+      return <span className="text-[11px] text-amber-400 mt-0.5">📅 Falta 1 dia (Amanhã)</span>;
+    }
+    if (days === 0) {
+      return <span className="text-[11px] text-rose-400 font-bold mt-0.5 animate-pulse">🚨 Termina hoje!</span>;
+    }
+    return <span className="text-[11px] text-rose-500 font-semibold mt-0.5">⚠️ Atrasada há {Math.abs(days)} dias</span>;
   };
 
   return (
@@ -227,7 +218,6 @@ export default function TodoPage() {
               <div className="space-y-3">
                 {todos.map((todo) => {
                   const isAnimating = animatingTaskId === todo.id;
-                  const dueDateBadge = getDueDateBadge(todo.duo_date);
                   
                   return (
                     <div
@@ -256,7 +246,7 @@ export default function TodoPage() {
                       </button>
 
                       {/* Texto da tarefa + Badge de prazo */}
-                      <div className="flex-1 min-w-0">
+                      <div className="flex flex-col flex-1 text-left min-w-0">
                         <span
                           className={cn(
                             "text-slate-50 transition-all duration-200",
@@ -265,12 +255,9 @@ export default function TodoPage() {
                         >
                           {todo.title}
                         </span>
-                        {dueDateBadge && (
-                          <div className="mt-1 flex items-center gap-2">
-                            <Calendar className="w-3 h-3 text-slate-500" />
-                            {dueDateBadge}
-                          </div>
-                        )}
+                        
+                        {/* BADGE DE DIAS RESTANTES COM FALLBACK */}
+                        {renderDueDateBadge(todo.duo_date)}
                       </div>
 
                       {/* Botão de deletar (só aparece no hover para tarefas ativas) */}
@@ -338,8 +325,6 @@ export default function TodoPage() {
                 {completedTodos.length > 0 ? (
                   <div className="space-y-3">
                     {completedTodos.map((todo) => {
-                      const dueDateBadge = getDueDateBadge(todo.duo_date);
-                      
                       return (
                         <div
                           key={todo.id}
@@ -349,16 +334,13 @@ export default function TodoPage() {
                             <Check className="w-3 h-3" />
                           </div>
 
-                          <div className="flex-1 min-w-0">
+                          <div className="flex flex-col flex-1 text-left min-w-0">
                             <span className="text-slate-50 line-through opacity-60">
                               {todo.title}
                             </span>
-                            {dueDateBadge && (
-                              <div className="mt-1 flex items-center gap-2">
-                                <Calendar className="w-3 h-3 text-slate-500" />
-                                {dueDateBadge}
-                              </div>
-                            )}
+                            
+                            {/* BADGE DE DIAS RESTANTES para tarefas concluídas COM FALLBACK */}
+                            {renderDueDateBadge(todo.duo_date)}
                           </div>
 
                           <Button

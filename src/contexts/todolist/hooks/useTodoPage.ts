@@ -128,16 +128,16 @@ export function useTodoPage() {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
-  const renderDueDateBadge = (duoDate: string | null) => {
+  const getDueDateBadgeInfo = (duoDate: string | null) => {
     if (!duoDate) {
-      return <span className="text-[11px] text-slate-500 mt-0.5">📅 Sem prazo definido</span>;
+      return { text: "📅 Sem prazo definido", className: "text-[11px] text-slate-500 mt-0.5" };
     }
     const days = getDaysRemaining(duoDate);
-    if (days === null) return <span className="text-[11px] text-slate-500 mt-0.5">Erro ao calcular data</span>;
-    if (days > 1) return <span className="text-[11px] text-purple-400 mt-0.5">📅 Faltam {days} dias</span>;
-    if (days === 1) return <span className="text-[11px] text-amber-400 mt-0.5">📅 Falta 1 dia (Amanhã)</span>;
-    if (days === 0) return <span className="text-[11px] text-rose-400 font-bold mt-0.5 animate-pulse">🚨 Termina hoje!</span>;
-    return <span className="text-[11px] text-rose-500 font-semibold mt-0.5">⚠️ Atrasada há {Math.abs(days)} dias</span>;
+    if (days === null) return { text: "Erro ao calcular data", className: "text-[11px] text-slate-500 mt-0.5" };
+    if (days > 1) return { text: `📅 Faltam ${days} dias`, className: "text-[11px] text-purple-400 mt-0.5" };
+    if (days === 1) return { text: "📅 Falta 1 dia (Amanhã)", className: "text-[11px] text-amber-400 mt-0.5" };
+    if (days === 0) return { text: "🚨 Termina hoje!", className: "text-[11px] text-rose-400 font-bold mt-0.5 animate-pulse" };
+    return { text: `⚠️ Atrasada há ${Math.abs(days)} dias`, className: "text-[11px] text-rose-500 font-semibold mt-0.5" };
   };
 
   return {
@@ -180,6 +180,6 @@ export function useTodoPage() {
     handleToggleTodo,
     handleDeletePermanent,
     // Utils
-    renderDueDateBadge,
+    getDueDateBadgeInfo,
   };
 }

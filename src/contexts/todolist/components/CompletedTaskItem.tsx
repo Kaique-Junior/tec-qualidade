@@ -7,7 +7,7 @@ interface CompletedTaskItemProps {
   todo: Todo;
   isLoading: boolean;
   onDelete: (id: string) => void;
-  renderDueDateBadge: (duoDate: string | null) => React.ReactNode;
+  getDueDateBadgeInfo: (duoDate: string | null) => { text: string; className: string };
 }
 
 /**
@@ -17,8 +17,10 @@ export const CompletedTaskItem = ({
   todo, 
   isLoading, 
   onDelete, 
-  renderDueDateBadge 
+  getDueDateBadgeInfo 
 }: CompletedTaskItemProps) => {
+  const badgeInfo = getDueDateBadgeInfo(todo.duo_date);
+  
   return (
     <div className="flex items-center gap-3 p-3 bg-slate-900/30 border border-slate-800 rounded-lg hover:bg-slate-900/50 transition-all duration-200">
       <div className="w-5 h-5 rounded border-2 bg-green-600 border-green-600 text-white flex items-center justify-center flex-shrink-0">
@@ -29,7 +31,9 @@ export const CompletedTaskItem = ({
         <span className="text-slate-50 line-through opacity-60">
           {todo.title}
         </span>
-        {renderDueDateBadge(todo.duo_date)}
+        <span className={badgeInfo.className}>
+          {badgeInfo.text}
+        </span>
       </div>
 
       <Button

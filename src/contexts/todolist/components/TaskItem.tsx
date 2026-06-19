@@ -10,7 +10,7 @@ interface TaskItemProps {
   onToggle: (id: string, isCompleted: boolean) => void;
   onEdit: (todo: { id: string; title: string; duo_date: string | null }) => void;
   onDelete: (id: string) => void;
-  renderDueDateBadge: (duoDate: string | null) => React.ReactNode;
+  getDueDateBadgeInfo: (duoDate: string | null) => { text: string; className: string };
 }
 
 /**
@@ -23,8 +23,10 @@ export const TaskItem = ({
   onToggle, 
   onEdit, 
   onDelete, 
-  renderDueDateBadge 
+  getDueDateBadgeInfo 
 }: TaskItemProps) => {
+  const badgeInfo = getDueDateBadgeInfo(todo.duo_date);
+  
   return (
     <div className={cn(
       "flex items-center gap-3 p-3 bg-slate-900/30 border border-slate-800 rounded-lg hover:bg-slate-900/50 transition-all duration-200 group",
@@ -52,7 +54,9 @@ export const TaskItem = ({
         )}>
           {todo.title}
         </span>
-        {renderDueDateBadge(todo.duo_date)}
+        <span className={badgeInfo.className}>
+          {badgeInfo.text}
+        </span>
       </div>
 
       <div className="flex items-center gap-1">

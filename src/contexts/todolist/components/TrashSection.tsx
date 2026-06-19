@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 import { CompletedTaskItem } from "./CompletedTaskItem";
 import { cn } from "@/lib/utils";
 import type { Todo } from "../types";
@@ -9,7 +10,7 @@ interface TrashSectionProps {
   showTrash: boolean;
   setShowTrash: (show: boolean) => void;
   onDelete: (id: string) => void;
-  renderDueDateBadge: (duoDate: string | null) => React.ReactNode;
+  getDueDateBadgeInfo: (duoDate: string | null) => { text: string; className: string };
 }
 
 /**
@@ -21,7 +22,7 @@ export const TrashSection = ({
   showTrash, 
   setShowTrash, 
   onDelete, 
-  renderDueDateBadge 
+  getDueDateBadgeInfo 
 }: TrashSectionProps) => {
   return (
     <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900/30">
@@ -61,7 +62,7 @@ export const TrashSection = ({
                   todo={todo}
                   isLoading={isLoading}
                   onDelete={onDelete}
-                  renderDueDateBadge={renderDueDateBadge}
+                  getDueDateBadgeInfo={getDueDateBadgeInfo}
                 />
               ))}
             </div>

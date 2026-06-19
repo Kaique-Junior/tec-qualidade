@@ -45,7 +45,7 @@ export default function TodoPage() {
     handleUpdateTask,
     handleToggleTodo,
     handleDeletePermanent,
-    renderDueDateBadge,
+    getDueDateBadgeInfo,
   } = useTodoPage();
 
   // Redirect se não autenticado
@@ -90,20 +90,20 @@ export default function TodoPage() {
           <TaskList
             todos={todos}
             isLoading={isLoading}
-            animatingTaskId={null} // Será controlado via hook se necessário
+            animatingTaskId={null}
             onToggle={handleToggleTodo}
             onEdit={handleOpenEditModal}
             onDelete={handleDeletePermanent}
-            renderDueDateBadge={renderDueDateBadge}
+            getDueDateBadgeInfo={getDueDateBadgeInfo}
           />
 
           <TrashSection
             completedTodos={completedTodos}
             isLoading={isLoading}
-            showTrash={false} // Controlado localmente no hook se necessário
+            showTrash={false}
             setShowTrash={() => {}}
             onDelete={handleDeletePermanent}
-            renderDueDateBadge={renderDueDateBadge}
+            getDueDateBadgeInfo={getDueDateBadgeInfo}
           />
         </div>
       </main>

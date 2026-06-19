@@ -8,7 +8,7 @@ interface TaskListProps {
   onToggle: (id: string, isCompleted: boolean) => void;
   onEdit: (todo: { id: string; title: string; duo_date: string | null }) => void;
   onDelete: (id: string) => void;
-  renderDueDateBadge: (duoDate: string | null) => React.ReactNode;
+  getDueDateBadgeInfo: (duoDate: string | null) => { text: string; className: string };
 }
 
 /**
@@ -21,7 +21,7 @@ export const TaskList = ({
   onToggle, 
   onEdit, 
   onDelete, 
-  renderDueDateBadge 
+  getDueDateBadgeInfo 
 }: TaskListProps) => {
   if (todos.length === 0) {
     return (
@@ -48,7 +48,7 @@ export const TaskList = ({
           onToggle={onToggle}
           onEdit={onEdit}
           onDelete={onDelete}
-          renderDueDateBadge={renderDueDateBadge}
+          getDueDateBadgeInfo={getDueDateBadgeInfo}
         />
       ))}
     </div>

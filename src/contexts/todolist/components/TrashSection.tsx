@@ -1,5 +1,4 @@
 import { Trash2 } from "lucide-react";
-import { Check, Trash2 } from "lucide-react";
 import { CompletedTaskItem } from "./CompletedTaskItem";
 import { cn } from "@/lib/utils";
 import type { Todo } from "../types";

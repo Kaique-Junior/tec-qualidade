@@ -10,7 +10,7 @@ import { Footer } from "@/components/Footer";
 import { useState } from "react";
 import { TodoItem } from "@/contexts/todolist/components/TodoItem";
 import { cn } from "@/lib/utils";
-import { Calendar, Trash2, Plus, X, Check } from "lucide-react";
+import { Calendar, Trash2, Plus, X, Check, Edit2 } from "lucide-react";
 
 /**
  * Página de gerenciamento de tarefas do usuário.
@@ -19,6 +19,7 @@ import { Calendar, Trash2, Plus, X, Check } from "lucide-react";
  * - Header padrão
  * - Botão de voltar
  * - Modal para adicionar tarefas
+ * - Modal para editar tarefas
  * - Listas de tarefas ativas e concluídas (Lixeira)
  * - Estados vazios amigáveis
  * - Contador regressivo de dias
@@ -29,8 +30,12 @@ export default function TodoPage() {
   const navigate = useNavigate();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDueDate, setNewTaskDueDate] = useState("");
+  const [editTaskTitle, setEditTaskTitle] = useState("");
+  const [editTaskDueDate, setEditTaskDueDate] = useState("");
+  const [taskToEdit, setTaskToEdit] = useState<{ id: string; title: string; duo_date: string | null } | null>(null);
   const [animatingTaskId, setAnimatingTaskId] = useState<string | null>(null);
   const [showTrash, setShowTrash] = useState(false);
 
@@ -79,10 +84,47 @@ export default function TodoPage() {
     setNewTaskDueDate("");
   };
 
+  const handleOpenEditModal = (todo: { id: string; title: string; duo_date: string | null }) => {
+    setTaskToEdit(todo);
+    setEditTaskTitle(todo.title);
+    setEditTaskDueDate(todo.duo_date || "");
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setTaskToEdit(null);
+    setEditTaskTitle("");
+    setEditTaskDueDate("");
+  };
+
   const handleSubmitTask = () => {
     if (newTaskTitle.trim()) {
       addTodo({ title: newTaskTitle.trim(), dueDate: newTaskDueDate || undefined });
       handleCloseModal();
+    }
+  };
+
+  const handleUpdateTask = async () => {
+    if (!taskToEdit || !editTaskTitle.trim()) return;
+
+    try {
+      const { error } = await supabase
+        .from("todolist")
+        .update({
+          title: editTaskTitle.trim(),
+          duo_date: editTaskDueDate || null
+        })
+        .eq("id", taskToEdit.id);
+
+      if (error) throw new Error(error.message);
+
+      toast.success("Tarefa atualizada com sucesso!");
+      handleCloseEditModal();
+      // Invalida queries para atualizar a lista
+      window.location.reload();
+    } catch (error) {
+      toast.error("Erro ao atualizar tarefa: " + (error as Error).message);
     }
   };
 
@@ -260,19 +302,36 @@ export default function TodoPage() {
                         {renderDueDateBadge(todo.duo_date)}
                       </div>
 
-                      {/* Botão de deletar (só aparece no hover para tarefas ativas) */}
-                      <Button
-                        onClick={() => handleDeletePermanent(todo.id)}
-                        disabled={isLoading}
-                        size="sm"
-                        variant="ghost"
-                        className={cn(
-                          "text-red-500 hover:text-red-400 hover:bg-red-500/10 p-1 transition-all duration-200 opacity-0 group-hover:opacity-100",
-                          isLoading && "opacity-50 cursor-not-allowed"
-                        )}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {/* Botões de ação: Editar e Deletar */}
+                      <div className="flex items-center gap-1">
+                        {/* Botão Editar */}
+                        <button
+                          onClick={() => handleOpenEditModal({ 
+                            id: todo.id, 
+                            title: todo.title, 
+                            duo_date: todo.duo_date 
+                          })}
+                          disabled={isLoading || isAnimating}
+                          className="text-slate-400 hover:text-purple-400 transition-colors p-1.5 rounded hover:bg-purple-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                          aria-label="Editar tarefa"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+
+                        {/* Botão de deletar */}
+                        <Button
+                          onClick={() => handleDeletePermanent(todo.id)}
+                          disabled={isLoading}
+                          size="sm"
+                          variant="ghost"
+                          className={cn(
+                            "text-red-500 hover:text-red-400 hover:bg-red-500/10 p-1 transition-all duration-200 opacity-0 group-hover:opacity-100",
+                            isLoading && "opacity-50 cursor-not-allowed"
+                          )}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   );
                 })}
@@ -431,6 +490,67 @@ export default function TodoPage() {
             >
               <Plus className="w-4 h-4 mr-2" />
               Salvar Tarefa
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Edição de Tarefa */}
+      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+        <DialogContent className="bg-slate-900/95 backdrop-blur-sm border border-slate-700 shadow-2xl max-w-md">
+          <DialogHeader className="border-b border-slate-800">
+            <DialogTitle className="text-slate-50">Editar Tarefa</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Atualize o título e o prazo da tarefa
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            {/* Campo Título */}
+            <div>
+              <label htmlFor="editTaskTitle" className="block text-sm font-medium text-slate-400 mb-2">
+                Título da Tarefa
+              </label>
+              <input
+                id="editTaskTitle"
+                type="text"
+                value={editTaskTitle}
+                onChange={(e) => setEditTaskTitle(e.target.value)}
+                placeholder="Ex: Estudar para a prova de Qualidade"
+                autoFocus
+                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              />
+            </div>
+
+            {/* Campo Data de Prazo */}
+            <div>
+              <label htmlFor="editTaskDueDate" className="block text-sm font-medium text-slate-400 mb-2">
+                Prazo Final (opcional)
+              </label>
+              <input
+                id="editTaskDueDate"
+                type="date"
+                value={editTaskDueDate}
+                onChange={(e) => setEditTaskDueDate(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all accent-purple-500"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="flex gap-2 border-t border-slate-800">
+            <Button
+              variant="outline"
+              onClick={handleCloseEditModal}
+              className="flex-1 border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleUpdateTask}
+              disabled={!editTaskTitle.trim() || isLoading}
+              className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-medium px-4 py-2 transition-all duration-200"
+            >
+              Salvar Alterações
             </Button>
           </DialogFooter>
         </DialogContent>

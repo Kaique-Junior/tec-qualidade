@@ -26,15 +26,16 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
       className
     )}>
       {/* Imagem de capa */}
-      <div className="h-40 w-full">
+      <div className="h-40 w-full relative">
         <img
           src={disciplina.icone}
           alt={`Capa da disciplina ${disciplina.nome}`}
           className="w-full h-full object-cover"
           onError={(e) => {
             // Fallback caso o link da imagem quebre
-            (e.target as HTMLImageElement).style.display = 'none';
-            const fallbackDiv = e.target.parentElement?.querySelector('.fallback-image');
+            const imgElement = e.target as HTMLImageElement;
+            imgElement.style.display = 'none';
+            const fallbackDiv = imgElement.parentElement?.querySelector('.fallback-image');
             if (fallbackDiv) {
               fallbackDiv.style.display = 'flex';
             }

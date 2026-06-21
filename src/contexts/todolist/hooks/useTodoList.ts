@@ -7,16 +7,19 @@ import type { Todo } from "../types";
  * Hook para gerenciar todo o fluxo de tarefas do usuário.
  * 
  * Implementa funções para:
- * - Buscar tarefas do usuário logado
+ * - Buscar tarefas ativas do usuário logado
+ * - Buscar tarefas na lixeira (completed)
  * - Adicionar nova tarefa
  * - Alternar status de conclusão
- * - Deletar tarefa
+ * - Mover para lixeira (soft delete - marca is_completed = true)
+ * - Restaurar da lixeira (marca is_completed = false)
+ * - Deletar permanentemente
  */
 export function useTodoList() {
   const queryClient = useQueryClient();
 
-  // Buscar todas as tarefas do usuário
-  const { data: todos, isLoading } = useQuery({
+  // Buscar todas as tarefas do usuário (ativas e lixeira)
+  const { data: allTodos, isLoading } = useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
       try {
@@ -35,6 +38,12 @@ export function useTodoList() {
     },
   });
 
+  // Filtrar tarefas ativas (não concluídas)
+  const todos = allTodos?.filter(todo => !todo.is_completed) || [];
+
+  // Filtrar tarefas na lixeira (concluídas)
+  const completedTodos = allTodos?.filter(todo => todo.is_completed) || [];
+
   // Adicionar nova tarefa
   const { mutate: addTodo } = useMutation({
     mutationFn: async ({ title, dueDate }: { title: string; dueDate?: string }) => {
@@ -48,7 +57,6 @@ export function useTodoList() {
           is_completed: false,
         };
 
-        // Se houver data de prazo, adiciona no formato YYYY-MM-DD
         if (dueDate) {
           insertData.duo_date = dueDate;
         }
@@ -65,7 +73,7 @@ export function useTodoList() {
         throw error;
       }
     },
-    onSuccess: (newTodo) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       toast.success("Tarefa adicionada com sucesso!");
     },
@@ -92,7 +100,51 @@ export function useTodoList() {
     },
   });
 
-  // Deletar tarefa
+  // Mover para lixeira (soft delete - apenas marca is_completed = true)
+  const { mutate: moveToTrash } = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const { error } = await supabase
+          .from("todolist")
+          .update({ is_completed: true })
+          .eq("id", id);
+
+        if (error) throw new Error(error.message);
+        return id;
+      } catch (error) {
+        toast.error("Erro ao mover para lixeira: " + (error as Error).message);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      toast.success("Tarefa movida para a lixeira!");
+    },
+  });
+
+  // Restaurar da lixeira (marca is_completed = false)
+  const { mutate: restoreFromTrash } = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const { error } = await supabase
+          .from("todolist")
+          .update({ is_completed: false })
+          .eq("id", id);
+
+        if (error) throw new Error(error.message);
+        return id;
+      } catch (error) {
+        toast.error("Erro ao restaurar tarefa: " + (error as Error).message);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      toast.success("Tarefa restaurada com sucesso!");
+    },
+  });
+
+  // Deletar permanentemente
   const { mutate: deleteTodo } = useMutation({
     mutationFn: async (id: string) => {
       try {
@@ -110,20 +162,18 @@ export function useTodoList() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
-      toast.success("Tarefa deletada com sucesso!");
+      toast.success("Tarefa excluída permanentemente!");
     },
   });
 
-  // Separar tarefas ativas e concluídas
-  const activeTodos = todos?.filter(todo => !todo.is_completed) || [];
-  const completedTodos = todos?.filter(todo => todo.is_completed) || [];
-
   return {
-    todos: activeTodos,
+    todos,
     completedTodos,
     isLoading,
     addTodo,
     toggleTodo,
+    moveToTrash,
+    restoreFromTrash,
     deleteTodo,
   };
 }

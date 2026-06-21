@@ -4,4 +4,5 @@ export interface Todo {
   title: string;
   is_completed: boolean;
   created_at: string;
+  duo_date?: string | null;
 }

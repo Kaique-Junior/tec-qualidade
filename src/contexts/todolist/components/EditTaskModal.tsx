@@ -8,7 +8,6 @@ interface EditTaskModalProps {
   setTitle: (title: string) => void;
   dueDate: string;
   setDueDate: (date: string) => void;
-  void;
   onSubmit: () => void;
   isLoading: boolean;
 }
@@ -66,7 +65,7 @@ export const EditTaskModal = ({
           </div>
         </div>
 
-        <DialogFooter className="flex gap-2 border-t border-slate-800">
+        <DialogFooter className="flex gap-2 border-t border-slate-8000">
           <Button
             variant="outline"
             onClick={onClose}

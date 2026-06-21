@@ -20,25 +20,27 @@ export const DisciplinaCard = ({ disciplina, className }: DisciplinaCardProps) =
     window.location.href = `/disciplina/${disciplina.slug}`;
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    img.style.display = 'none';
+    const fallbackDiv = img.parentElement?.querySelector('.fallback-image');
+    if (fallbackDiv) {
+      (fallbackDiv as HTMLElement).style.display = 'flex';
+    }
+  };
+
   return (
     <Card className={cn(
       "flex flex-col bg-[#111827] border border-slate-800 shadow-sm transition-all duration-300 hover:border-purple-500/50 hover:shadow-[0_0_15px_rgba(168,85,247,0.05)] hover:-translate-y-1 overflow-hidden",
       className
     )}>
       {/* Imagem de capa */}
-      <div className="h-40 w-full">
+      <div className="h-40 w-full relative">
         <img
           src={disciplina.icone}
           alt={`Capa da disciplina ${disciplina.nome}`}
           className="w-full h-full object-cover"
-          onError={(e) => {
-            // Fallback caso o link da imagem quebre
-            (e.target as HTMLImageElement).style.display = 'none';
-            const fallbackDiv = e.target.parentElement?.querySelector('.fallback-image');
-            if (fallbackDiv) {
-              fallbackDiv.style.display = 'flex';
-            }
-          }}
+          onError={handleImageError}
         />
         <div className="fallback-image hidden absolute inset-0 bg-[#111827] flex items-center justify-center">
           <span className="text-4xl text-slate-600">{disciplina.icone}</span>

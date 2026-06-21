@@ -69,20 +69,15 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Lado esquerdo - Logo KQUIZZ */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">KQ</span>
-              </div>
-              <div>
-                <h1 className="font-black text-2xl bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
-                  KQUIZZ
-                </h1>
-                <p className="text-sm text-slate-500 hidden sm:inline">| Técnico em Qualidade</p>
-              </div>
+            <div>
+              <h1 className="font-black text-2xl bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
+                KQUIZZ
+              </h1>
+              <p className="text-sm text-slate-500 hidden sm:inline">| Técnico em Qualidade</p>
             </div>
 
             {/* Centro - Ícone Zap */}
-            <div className="absolute left-1/2 -translate-x-1/2">
+            <div className="absolute left-1/2 transform -translate-x-1/2">
               <Zap className="w-8 h-8 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
             </div>
 

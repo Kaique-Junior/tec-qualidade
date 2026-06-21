@@ -21,18 +21,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Página de gerenciamento de tarefas do usuário.
- *
- * Layout limpo e responsivo com:
- * - Header padrão
- * - Botão de voltar centralizado
- * - Modal para adicionar tarefas
- * - Modal para editar tarefas
- * - Modal para confirmar mover para lixeira
- * - Modal para confirmar exclusão permanente
- * - Listas de tarefas ativas e lixeira/histórico
- * - Estados vazios amigáveis
- * - Contador regressivo de dias
- * - Animação de 2s ao concluir tarefa
  */
 export default function TodoPage() {
   const { user, loading } = useAuth();
@@ -266,11 +254,9 @@ export default function TodoPage() {
     <div className="min-h-screen bg-[#0b0f19] flex flex-col">
       {/* Header */}
       <header className="bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-3">
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">KQ</span>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Lado esquerdo - Logo KQUIZZ */}
             <div>
               <h1 className="font-black text-2xl bg-gradient-to-r from-purple-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
                 KQUIZZ
@@ -279,256 +265,253 @@ export default function TodoPage() {
                 | Técnico em Qualidade
               </p>
             </div>
-          </div>
 
-          <div className="flex-1 flex justify-center mb-4 md:mb-0">
-            <div className="relative">
+            {/* Centro - Ícone Zap */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
               <Zap className="w-8 h-8 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
             </div>
-          </div>
 
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-slate-400 hidden md:block">
-              Bem-vindo, {user?.email || "Usuário"}!
-            </span>
+            {/* Lado direito - Usuário */}
+            <div className="flex items-center">
+              <span className="text-sm text-slate-400 hidden md:block">
+                Bem-vindo, {user?.email || "Usuário"}!
+              </span>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="flex-1 flex flex-col">
-        {/* Botão Voltar - centralizado no corpo da página */}
-        <div className="flex justify-center py-4">
+      {/* Botão Voltar */}
+      <div className="flex justify-center py-4">
+        <button
+          onClick={handleBackToHome}
+          className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors px-4 py-2 rounded-lg hover:bg-slate-900/30"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Voltar</span>
+        </button>
+      </div>
+
+      {/* Conteúdo centralizado */}
+      <main className="flex-1 max-w-xl mx-auto w-full px-4 mt-6 mb-8">
+        {/* Header com botão de adicionar */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-slate-50">Tarefas Ativas</h2>
           <button
-            onClick={handleBackToHome}
-            className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors px-4 py-2 rounded-lg hover:bg-slate-900/30"
+            onClick={handleOpenModal}
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg p-2 transition-all duration-200"
+            aria-label="Adicionar nova tarefa"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span>Voltar</span>
+            <Plus className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Conteúdo centralizado */}
-        <div className="max-w-xl mx-auto w-full px-4 mt-6 mb-8">
-          {/* Header com botão de adicionar */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-50">Tarefas Ativas</h2>
-            <button
-              onClick={handleOpenModal}
-              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg p-2 transition-all duration-200"
-              aria-label="Adicionar nova tarefa"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
-          </div>
+        {/* Lista de tarefas ativas */}
+        <div className="mb-8">
+          {todos.length > 0 ? (
+            <div className="space-y-3">
+              {todos.map((todo) => {
+                const isAnimating = animatingTaskId === todo.id;
 
-          {/* Lista de tarefas ativas */}
-          <div className="mb-8">
-            {todos.length > 0 ? (
-              <div className="space-y-3">
-                {todos.map((todo) => {
-                  const isAnimating = animatingTaskId === todo.id;
-
-                  return (
-                    <div
-                      key={todo.id}
+                return (
+                  <div
+                    key={todo.id}
+                    className={cn(
+                      "flex items-center gap-3 p-3 bg-slate-900/30 border border-slate-800 rounded-lg hover:bg-slate-900/50 transition-all duration-200 group",
+                      isAnimating && "opacity-60"
+                    )}
+                  >
+                    {/* Checkbox */}
+                    <button
+                      onClick={() =>
+                        handleToggleTodo(todo.id, todo.is_completed)
+                      }
+                      disabled={isLoading || isAnimating}
                       className={cn(
-                        "flex items-center gap-3 p-3 bg-slate-900/30 border border-slate-800 rounded-lg hover:bg-slate-900/50 transition-all duration-200 group",
-                        isAnimating && "opacity-60"
+                        "w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200",
+                        isAnimating
+                          ? "bg-green-600 border-green-600 text-white animate-pulse"
+                          : todo.is_completed
+                            ? "bg-green-600 border-green-600 text-white"
+                            : "border-slate-600 hover:border-purple-500"
                       )}
                     >
-                      {/* Checkbox */}
-                      <button
-                        onClick={() =>
-                          handleToggleTodo(todo.id, todo.is_completed)
-                        }
-                        disabled={isLoading || isAnimating}
+                      {todo.is_completed || isAnimating ? (
+                        <Check className="w-3 h-3" />
+                      ) : null}
+                    </button>
+
+                    {/* Texto da tarefa + Badge de prazo */}
+                    <div className="flex flex-col flex-1 text-left min-w-0">
+                      <span
                         className={cn(
-                          "w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200",
-                          isAnimating
-                            ? "bg-green-600 border-green-600 text-white animate-pulse"
-                            : todo.is_completed
-                              ? "bg-green-600 border-green-600 text-white"
-                              : "border-slate-600 hover:border-purple-500"
+                          "text-slate-50 transition-all duration-200",
+                          todo.is_completed && "line-through opacity-60"
                         )}
                       >
-                        {todo.is_completed || isAnimating ? (
-                          <Check className="w-3 h-3" />
-                        ) : null}
+                        {todo.title}
+                      </span>
+                      {renderDueDateBadge(todo.duo_date)}
+                    </div>
+
+                    {/* Botões de ação */}
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() =>
+                          handleOpenEditModal({
+                            id: todo.id,
+                            title: todo.title,
+                            duo_date: todo.duo_date,
+                          })
+                        }
+                        disabled={isLoading || isAnimating}
+                        className="text-slate-400 hover:text-purple-400 transition-colors p-1.5 rounded hover:bg-purple-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Editar tarefa"
+                      >
+                        <Edit2 className="w-4 h-4" />
                       </button>
 
-                      {/* Texto da tarefa + Badge de prazo */}
-                      <div className="flex flex-col flex-1 text-left min-w-0">
-                        <span
-                          className={cn(
-                            "text-slate-50 transition-all duration-200",
-                            todo.is_completed && "line-through opacity-60"
-                          )}
-                        >
-                          {todo.title}
-                        </span>
-                        {renderDueDateBadge(todo.duo_date)}
-                      </div>
+                      <Button
+                        onClick={() => handleOpenTrashModal(todo.id)}
+                        disabled={isLoading}
+                        size="sm"
+                        variant="ghost"
+                        className={cn(
+                          "text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 p-1.5 transition-all duration-200 opacity-0 group-hover:opacity-100",
+                          isLoading && "opacity-50 cursor-not-allowed"
+                        )}
+                        aria-label="Mover para lixeira"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-slate-600 mb-4">
+                <svg
+                  className="w-16 h-16 mx-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-50 mb-2">
+                Nenhuma tarefa ativa
+              </h3>
+              <p className="text-slate-400">
+                Adicione novas tarefas para começar!
+              </p>
+            </div>
+          )}
+        </div>
 
-                      {/* Botões de ação: Editar e Mover para Lixeira */}
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() =>
-                            handleOpenEditModal({
-                              id: todo.id,
-                              title: todo.title,
-                              duo_date: todo.duo_date,
-                            })
-                          }
-                          disabled={isLoading || isAnimating}
-                          className="text-slate-400 hover:text-purple-400 transition-colors p-1.5 rounded hover:bg-purple-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                          aria-label="Editar tarefa"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
+        {/* Seção Lixeira / Histórico */}
+        <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900/30">
+          <button
+            onClick={() => setShowTrash(!showTrash)}
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-900/50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <Trash2 className="w-5 h-5 text-slate-400" />
+              <span className="font-semibold text-slate-50">
+                🗑️ Lixeira / Histórico
+              </span>
+              {completedTodos.length > 0 && (
+                <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-slate-800 text-slate-400">
+                  {completedTodos.length}
+                </span>
+              )}
+            </div>
+            <svg
+              className={cn(
+                "w-4 h-4 text-slate-400 transition-transform duration-200",
+                showTrash && "rotate-180"
+              )}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          {showTrash && (
+            <div className="border-t border-slate-800 p-4">
+              {completedTodos.length > 0 ? (
+                <div className="space-y-3">
+                  {completedTodos.map((todo) => {
+                    return (
+                      <div
+                        key={todo.id}
+                        className="flex items-center gap-3 p-3 bg-slate-900/30 border border-slate-800 rounded-lg hover:bg-slate-900/50 transition-all duration-200"
+                      >
+                        <div className="w-5 h-5 rounded border-2 bg-green-600 border-green-600 text-white flex items-center justify-center flex-shrink-0">
+                          <Check className="w-3 h-3" />
+                        </div>
+
+                        <div className="flex flex-col flex-1 text-left min-w-0">
+                          <span className="text-slate-50 line-through opacity-60">
+                            {todo.title}
+                          </span>
+                          {renderDueDateBadge(todo.duo_date)}
+                        </div>
 
                         <Button
-                          onClick={() => handleOpenTrashModal(todo.id)}
+                          onClick={() => handleRestoreTask(todo.id)}
                           disabled={isLoading}
                           size="sm"
                           variant="ghost"
-                          className={cn(
-                            "text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 p-1.5 transition-all duration-200 opacity-0 group-hover:opacity-100",
-                            isLoading && "opacity-50 cursor-not-allowed"
-                          )}
-                          aria-label="Mover para lixeira"
+                          className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 p-1.5 transition-all duration-200"
+                          aria-label="Restaurar tarefa"
+                        >
+                          <Undo2 className="w-4 h-4" />
+                        </Button>
+
+                        <Button
+                          onClick={() => handleOpenDeleteModal(todo.id)}
+                          disabled={isLoading}
+                          size="sm"
+                          variant="ghost"
+                          className="text-rose-500 hover:text-rose-400 hover:bg-rose-500/10 p-1.5 transition-all duration-200"
+                          aria-label="Excluir permanentemente"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="text-slate-600 mb-4">
-                  <svg
-                    className="w-16 h-16 mx-auto"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
+                    );
+                  })}
                 </div>
-                <h3 className="text-lg font-semibold text-slate-50 mb-2">
-                  Nenhuma tarefa ativa
-                </h3>
-                <p className="text-slate-400">
-                  Adicione novas tarefas para começar!
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Seção Lixeira / Histórico - Accordion */}
-          <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900/30">
-            <button
-              onClick={() => setShowTrash(!showTrash)}
-              className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-900/50 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <Trash2 className="w-5 h-5 text-slate-400" />
-                <span className="font-semibold text-slate-50">
-                  🗑️ Lixeira / Histórico
-                </span>
-                {completedTodos.length > 0 && (
-                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-slate-800 text-slate-400">
-                    {completedTodos.length}
-                  </span>
-                )}
-              </div>
-              <svg
-                className={cn(
-                  "w-4 h-4 text-slate-400 transition-transform duration-200",
-                  showTrash && "rotate-180"
-                )}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-
-            {showTrash && (
-              <div className="border-t border-slate-800 p-4">
-                {completedTodos.length > 0 ? (
-                  <div className="space-y-3">
-                    {completedTodos.map((todo) => {
-                      return (
-                        <div
-                          key={todo.id}
-                          className="flex items-center gap-3 p-3 bg-slate-900/30 border border-slate-800 rounded-lg hover:bg-slate-900/50 transition-all duration-200"
-                        >
-                          <div className="w-5 h-5 rounded border-2 bg-green-600 border-green-600 text-white flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3" />
-                          </div>
-
-                          <div className="flex flex-col flex-1 text-left min-w-0">
-                            <span className="text-slate-50 line-through opacity-60">
-                              {todo.title}
-                            </span>
-                            {renderDueDateBadge(todo.duo_date)}
-                          </div>
-
-                          <Button
-                            onClick={() => handleRestoreTask(todo.id)}
-                            disabled={isLoading}
-                            size="sm"
-                            variant="ghost"
-                            className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 p-1.5 transition-all duration-200"
-                            aria-label="Restaurar tarefa"
-                          >
-                            <Undo2 className="w-4 h-4" />
-                          </Button>
-
-                          <Button
-                            onClick={() => handleOpenDeleteModal(todo.id)}
-                            disabled={isLoading}
-                            size="sm"
-                            variant="ghost"
-                            className="text-rose-500 hover:text-rose-400 hover:bg-rose-500/10 p-1.5 transition-all duration-200"
-                            aria-label="Excluir permanentemente"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Trash2 className="w-12 h-12 mx-auto text-slate-600 mb-4" />
-                    <h3 className="text-lg font-semibold text-slate-50 mb-2">
-                      Lixeira vazia
-                    </h3>
-                    <p className="text-slate-400">
-                      Tarefas movidas para lixeira aparecerão aqui.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Trash2 className="w-12 h-12 mx-auto text-slate-600 mb-4" />
+                  <h3 className="text-lg font-semibold text-slate-50 mb-2">
+                    Lixeira vazia
+                  </h3>
+                  <p className="text-slate-400">
+                    Tarefas movidas para lixeira aparecerão aqui.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
 

@@ -24,7 +24,7 @@ import { useQueryClient } from "@tanstack/react-query";
  *
  * Layout limpo e responsivo com:
  * - Header padrão
- * - Botão de voltar
+ * - Botão de voltar centralizado
  * - Modal para adicionar tarefas
  * - Modal para editar tarefas
  * - Modal para confirmar mover para lixeira
@@ -67,13 +67,11 @@ export default function TodoPage() {
     restoreFromTrash,
   } = useTodoList();
 
-  // Se o usuário não estiver autenticado, redireciona para o login
   if (!user && !loading) {
     window.location.href = "/login";
     return null;
   }
 
-  // Se estiver carregando autenticação ou tarefas, mostra tela de loading
   if (loading || isLoading) {
     return (
       <div className="min-h-screen bg-[#0b0f19] flex items-center justify-center">
@@ -89,9 +87,6 @@ export default function TodoPage() {
     navigate("/");
   };
 
-  // =============================
-  // Handlers de Criação
-  // =============================
   const handleOpenModal = () => {
     setIsModalOpen(true);
     setNewTaskTitle("");
@@ -114,9 +109,6 @@ export default function TodoPage() {
     }
   };
 
-  // =============================
-  // Handlers de Edição
-  // =============================
   const handleOpenEditModal = (todo: {
     id: string;
     title: string;
@@ -157,9 +149,6 @@ export default function TodoPage() {
     }
   };
 
-  // =============================
-  // Handlers de Mover para Lixeira (Soft Delete)
-  // =============================
   const handleOpenTrashModal = (id: string) => {
     setTaskToTrash(id);
     setIsTrashModalOpen(true);
@@ -177,16 +166,10 @@ export default function TodoPage() {
     }
   };
 
-  // =============================
-  // Handlers de Restaurar da Lixeira
-  // =============================
   const handleRestoreTask = (id: string) => {
     restoreFromTrash(id);
   };
 
-  // =============================
-  // Handlers de Exclusão Permanente
-  // =============================
   const handleOpenDeleteModal = (id: string) => {
     setTaskToDelete(id);
     setIsDeleteModalOpen(true);
@@ -204,9 +187,6 @@ export default function TodoPage() {
     }
   };
 
-  // =============================
-  // Handlers de Toggle (Concluir/Reabrir)
-  // =============================
   const handleToggleTodo = (id: string, isCompleted: boolean) => {
     if (!isCompleted && !animatingTaskId) {
       setAnimatingTaskId(id);
@@ -219,9 +199,6 @@ export default function TodoPage() {
     }
   };
 
-  // =============================
-  // Funções de Dias Restantes
-  // =============================
   const getDaysRemaining = (duoDateStr: string) => {
     if (!duoDateStr) return null;
 
@@ -320,26 +297,16 @@ export default function TodoPage() {
 
       {/* Main content */}
       <main className="flex-1 flex flex-col">
-        {/* Botão de voltar */}
-        <div className="py-4">
+        {/* Botão Voltar - centralizado no corpo da página */}
+        <div className="flex justify-center py-4">
           <button
             onClick={handleBackToHome}
-            className="flex items-center space-x-2 text-purple-400 hover:text-purple-300 transition-colors px-4 py-2 rounded-lg hover:bg-slate-900/30"
+            className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors px-4 py-2 rounded-lg hover:bg-slate-900/30"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span>Voltar para Funcionalidades</span>
+            <span>Voltar</span>
           </button>
         </div>
 
@@ -407,7 +374,6 @@ export default function TodoPage() {
 
                       {/* Botões de ação: Editar e Mover para Lixeira */}
                       <div className="flex items-center gap-1">
-                        {/* Botão Editar */}
                         <button
                           onClick={() =>
                             handleOpenEditModal({
@@ -423,7 +389,6 @@ export default function TodoPage() {
                           <Edit2 className="w-4 h-4" />
                         </button>
 
-                        {/* Botão Mover para Lixeira (Soft Delete) */}
                         <Button
                           onClick={() => handleOpenTrashModal(todo.id)}
                           disabled={isLoading}
@@ -525,7 +490,6 @@ export default function TodoPage() {
                             {renderDueDateBadge(todo.duo_date)}
                           </div>
 
-                          {/* Botão Restaurar */}
                           <Button
                             onClick={() => handleRestoreTask(todo.id)}
                             disabled={isLoading}
@@ -537,7 +501,6 @@ export default function TodoPage() {
                             <Undo2 className="w-4 h-4" />
                           </Button>
 
-                          {/* Botão Excluir Permanentemente */}
                           <Button
                             onClick={() => handleOpenDeleteModal(todo.id)}
                             disabled={isLoading}

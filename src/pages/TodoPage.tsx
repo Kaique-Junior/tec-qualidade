@@ -16,6 +16,8 @@ import { Footer } from "@/components/Footer";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Trash2, Plus, Check, Edit2, Undo2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * Página de gerenciamento de tarefas do usuário.
@@ -35,6 +37,7 @@ import { Trash2, Plus, Check, Edit2, Undo2 } from "lucide-react";
 export default function TodoPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isTrashModalOpen, setIsTrashModalOpen] = useState(false);
@@ -146,9 +149,9 @@ export default function TodoPage() {
 
       if (error) throw new Error(error.message);
 
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
       toast.success("Tarefa atualizada com sucesso!");
       handleCloseEditModal();
-      window.location.reload();
     } catch (error) {
       toast.error("Erro ao atualizar tarefa: " + (error as Error).message);
     }

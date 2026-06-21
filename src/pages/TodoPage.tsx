@@ -20,6 +20,7 @@ import { Calendar, Trash2, Plus, X, Check, Edit2 } from "lucide-react";
  * - Botão de voltar
  * - Modal para adicionar tarefas
  * - Modal para editar tarefas
+ * - Modal para confirmar exclusão
  * - Listas de tarefas ativas e concluídas (Lixeira)
  * - Estados vazios amigáveis
  * - Contador regressivo de dias
@@ -31,11 +32,13 @@ export default function TodoPage() {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDueDate, setNewTaskDueDate] = useState("");
   const [editTaskTitle, setEditTaskTitle] = useState("");
   const [editTaskDueDate, setEditTaskDueDate] = useState("");
   const [taskToEdit, setTaskToEdit] = useState<{ id: string; title: string; duo_date: string | null } | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
   const [animatingTaskId, setAnimatingTaskId] = useState<string | null>(null);
   const [showTrash, setShowTrash] = useState(false);
 
@@ -98,6 +101,23 @@ export default function TodoPage() {
     setEditTaskDueDate("");
   };
 
+  const handleOpenDeleteModal = (id: string) => {
+    setTaskToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setTaskToDelete(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (taskToDelete) {
+      deleteTodo(taskToDelete);
+      handleCloseDeleteModal();
+    }
+  };
+
   const handleSubmitTask = () => {
     if (newTaskTitle.trim()) {
       addTodo({ title: newTaskTitle.trim(), dueDate: newTaskDueDate || undefined });
@@ -139,12 +159,6 @@ export default function TodoPage() {
     } else if (isCompleted) {
       // Reabrir tarefa concluída
       toggleTodo({ id, is_completed: false });
-    }
-  };
-
-  const handleDeletePermanent = (id: string) => {
-    if (confirm("Tem certeza que deseja excluir permanentemente esta tarefa?")) {
-      deleteTodo(id);
     }
   };
 
@@ -320,7 +334,7 @@ export default function TodoPage() {
 
                         {/* Botão de deletar */}
                         <Button
-                          onClick={() => handleDeletePermanent(todo.id)}
+                          onClick={() => handleOpenDeleteModal(todo.id)}
                           disabled={isLoading}
                           size="sm"
                           variant="ghost"
@@ -403,7 +417,7 @@ export default function TodoPage() {
                           </div>
 
                           <Button
-                            onClick={() => handleDeletePermanent(todo.id)}
+                            onClick={() => handleOpenDeleteModal(todo.id)}
                             disabled={isLoading}
                             size="sm"
                             variant="ghost"
@@ -551,6 +565,39 @@ export default function TodoPage() {
               className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-medium px-4 py-2 transition-all duration-200"
             >
               Salvar Alterações
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Confirmação de Exclusão */}
+      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DialogContent className="bg-slate-900/95 backdrop-blur-sm border border-slate-700 shadow-2xl max-w-md">
+          <DialogHeader className="border-b border-slate-800">
+            <DialogTitle className="text-slate-50 flex items-center gap-2">
+              <Trash2 className="w-5 h-5 text-rose-500" />
+              Confirmar Exclusão
+            </DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Tem certeza que deseja excluir permanentemente esta tarefa? Esta ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <DialogFooter className="flex gap-2 border-t border-slate-800">
+            <Button
+              variant="outline"
+              onClick={handleCloseDeleteModal}
+              className="flex-1 border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              disabled={isLoading}
+              className="flex-1 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white rounded-xl font-medium px-4 py-2 transition-all duration-200"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Excluir Permanentemente
             </Button>
           </DialogFooter>
         </DialogContent>

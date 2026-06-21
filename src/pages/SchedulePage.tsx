@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/auth/hooks/useAuth";
 import { useSchedule } from "@/contexts/schedule/hooks/useSchedule";
 import { ScheduleCard } from "@/contexts/schedule/components/ScheduleCard";
 import { EmptySchedule } from "@/contexts/schedule/components/EmptySchedule";
-import { ArrowLeft } from "lucide-react";
+import { Zap } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
 
